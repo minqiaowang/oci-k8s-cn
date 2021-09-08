@@ -1,0 +1,34 @@
+{
+    "tutorials": [
+        {
+            "title": "Workshop Overview",
+            "description":"Workhop Overview",
+            "filename":"./about-the-workshop/content.md"
+        },
+        {
+            "title": "Lab1: Create a Kubernetes Cluster",
+            "description":"Create a Kubernetes Cluster",
+            "filename":"./lab001/Create a Kubernetes Cluster.md"
+        },
+        {
+            "title": "Lab2: Accessing a Cluster",
+            "description":"Accessing a Cluster",
+            "filename":"./lab002/Accessing a Cluster.md"
+        },
+        {
+            "title": "Lab3: Deploy a Sample Ngnix App",
+            "description":"Deploy a Sample Ngnix App",
+            "filename":"./lab003/Deploy a Sample Ngnix App.md"
+        },
+        {
+            "title": "Lab4: Create a Database using the Custom image",
+            "description":"Create a Database using the Custom image",
+            "filename":"./lab004/Create a Database using the Custom image.md"
+        },        
+        {
+            "title": "Lab5: Kubernetes with DB Compute Instance",
+            "description":"Kubernetes with DB Compute Instance",
+            "filename":"./lab005/Kubernetes with DB Compute Instance.md"
+        }
+    ]
+}
