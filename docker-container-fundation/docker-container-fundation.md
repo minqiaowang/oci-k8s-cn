@@ -201,7 +201,7 @@
 14. 删除该容器。
 
     ```
-    $ docker rm my-nginx
+    $ <copy>docker rm my-nginx</copy>
     my-nginx
     ```
 
@@ -215,13 +215,185 @@
 
 你可以从头开始创建容器镜像，也可以使用一个现有的镜像，在里面安装自己的应用。下面我们会从一个现有镜像alpine开始。Alpine是一个轻量级的Linux发行版，包含linux的核心组件。我们已经写好了一个python应用，该程序在每次调用时会随机加载一些图片。
 
-1. sdfsdfa
-2. sdaf
-3. sadf
-4. asdfsadf
-5. sdaf
-6. sadf
-7. sdf
+1. 下载应用程序
+
+    ```
+    $ <copy>wget https://github.com/minqiaowang/oci-k8s-cn/raw/main/docker-container-fundation/flask-app.zip</copy>
+    --2021-12-22 03:38:05--  https://github.com/minqiaowang/oci-k8s-cn/raw/main/docker-container-fundation/flask-app.zip
+    Resolving github.com (github.com)... 15.164.81.167
+    Connecting to github.com (github.com)|15.164.81.167|:443... connected.
+    HTTP request sent, awaiting response... 302 Found
+    Location: https://raw.githubusercontent.com/minqiaowang/oci-k8s-cn/main/docker-container-fundation/flask-app.zip [following]
+    --2021-12-22 03:38:05--  https://raw.githubusercontent.com/minqiaowang/oci-k8s-cn/main/docker-container-fundation/flask-app.zip
+    Resolving raw.githubusercontent.com (raw.githubusercontent.com)... 185.199.108.133, 185.199.109.133, 185.199.110.133, ...
+    Connecting to raw.githubusercontent.com (raw.githubusercontent.com)|185.199.108.133|:443... connected.
+    HTTP request sent, awaiting response... 200 OK
+    Length: 2485 (2.4K) [application/zip]
+    Saving to: 'flask-app.zip'
+    
+    100%[========================================================================================>] 2,485       --.-K/s   in 0s      
+    
+    2021-12-22 03:38:06 (25.9 MB/s) - 'flask-app.zip' saved [2485/2485]
+    ```
+
+    
+
+2. 解压zip文件。
+
+    ```
+    $ <copy>unzip flask-app.zip</copy> 
+    Archive:  flask-app.zip
+       creating: flask-app/
+      inflating: flask-app/.DS_Store     
+      inflating: __MACOSX/flask-app/._.DS_Store  
+      inflating: flask-app/requirements.txt  
+      inflating: flask-app/app.py        
+       creating: flask-app/templates/
+      inflating: flask-app/templates/index.html
+    ```
+
+    
+
+3. 进入子目录。感兴趣的可以查看一下该python应该的脚本。
+
+    ```
+    $ <copy>cd flask-app</copy>
+    $ <copy>ls</copy>
+    app.py  requirements.txt  templates
+    ```
+
+    
+
+4. 在该目录下编辑一个名为Dockerfile的文件。拷贝如下内容到该文件中。
+
+    ```
+    <copy>
+    # our base image
+    FROM alpine:3.5
+    
+    # Install python and pip
+    RUN apk add --update py2-pip
+    
+    # install Python modules needed by the Python app
+    COPY requirements.txt /usr/src/app/
+    RUN pip install --no-cache-dir -r /usr/src/app/requirements.txt
+    
+    # copy files required for the app to run
+    COPY app.py /usr/src/app/
+    COPY templates/index.html /usr/src/app/templates/
+    
+    # tell the port number the container should expose
+    EXPOSE 5000
+    
+    # run the application
+    CMD ["python", "/usr/src/app/app.py"]
+    </copy>
+    ```
+
+    Dockerfile是用来构建docker image的描述文件，在该文件中我们可以看到镜像文件的生成过程。
+
+    - 从基础镜像alpine:3.5开始
+    - 安装python和pip包
+    - 安装应用所需的模块
+    - 拷贝应用程序到容器内部相应目录
+    - 在容器内部打开5000端口
+    - 容器启动时要运行的应用程序
+
+5. 生成容器镜像，命名为`myfirstapp:1.0`。
+
+    ```
+    $ <copy>docker build -t myfirstapp:1.0 .</copy>
+    Sending build context to Docker daemon  14.85kB
+    Step 1/8 : FROM alpine:3.5
+    Trying to pull repository docker.io/library/alpine ... 
+    3.5: Pulling from docker.io/library/alpine
+    8cae0e1ac61c: Pull complete 
+    Digest: sha256:66952b313e51c3bd1987d7c4ddf5dba9bc0fb6e524eed2448fa660246b3e76ec
+    Status: Downloaded newer image for alpine:3.5
+     ---> f80194ae2e0c
+    Step 2/8 : RUN apk add --update py2-pip
+     ---> Running in bb78edb6a44d
+    fetch http://dl-cdn.alpinelinux.org/alpine/v3.5/main/x86_64/APKINDEX.tar.gz
+    fetch http://dl-cdn.alpinelinux.org/alpine/v3.5/community/x86_64/APKINDEX.tar.gz
+    (1/12) Installing libbz2 (1.0.6-r5)
+    (2/12) Installing expat (2.2.0-r1)
+    (3/12) Installing libffi (3.2.1-r2)
+    (4/12) Installing gdbm (1.12-r0)
+    (5/12) Installing ncurses-terminfo-base (6.0_p20171125-r1)
+    (6/12) Installing ncurses-terminfo (6.0_p20171125-r1)
+    (7/12) Installing ncurses-libs (6.0_p20171125-r1)
+    (8/12) Installing readline (6.3.008-r4)
+    (9/12) Installing sqlite-libs (3.15.2-r2)
+    (10/12) Installing python2 (2.7.15-r0)
+    (11/12) Installing py-setuptools (29.0.1-r0)
+    (12/12) Installing py2-pip (9.0.0-r1)
+    Executing busybox-1.25.1-r2.trigger
+    OK: 62 MiB in 23 packages
+    Removing intermediate container bb78edb6a44d
+     ---> b02d3b07c818
+    Step 3/8 : COPY requirements.txt /usr/src/app/
+     ---> cc3d3ceb15be
+    Step 4/8 : RUN pip install --no-cache-dir -r /usr/src/app/requirements.txt
+     ---> Running in 5b59f6d7b137
+    Collecting Flask==0.10.1 (from -r /usr/src/app/requirements.txt (line 1))
+      Downloading https://files.pythonhosted.org/packages/db/9c/149ba60c47d107f85fe52564133348458f093dd5e6b57a5b60ab9ac517bb/Flask-0.10.1.tar.gz (544kB)
+    Collecting Werkzeug>=0.7 (from Flask==0.10.1->-r /usr/src/app/requirements.txt (line 1))
+      Downloading https://files.pythonhosted.org/packages/cc/94/5f7079a0e00bd6863ef8f1da638721e9da21e5bacee597595b318f71d62e/Werkzeug-1.0.1-py2.py3-none-any.whl (298kB)
+    Collecting Jinja2>=2.4 (from Flask==0.10.1->-r /usr/src/app/requirements.txt (line 1))
+      Downloading https://files.pythonhosted.org/packages/7e/c2/1eece8c95ddbc9b1aeb64f5783a9e07a286de42191b7204d67b7496ddf35/Jinja2-2.11.3-py2.py3-none-any.whl (125kB)
+    Collecting itsdangerous>=0.21 (from Flask==0.10.1->-r /usr/src/app/requirements.txt (line 1))
+      Downloading https://files.pythonhosted.org/packages/76/ae/44b03b253d6fade317f32c24d100b3b35c2239807046a4c953c7b89fa49e/itsdangerous-1.1.0-py2.py3-none-any.whl
+    Collecting MarkupSafe>=0.23 (from Jinja2>=2.4->Flask==0.10.1->-r /usr/src/app/requirements.txt (line 1))
+      Downloading https://files.pythonhosted.org/packages/b9/2e/64db92e53b86efccfaea71321f597fa2e1b2bd3853d8ce658568f7a13094/MarkupSafe-1.1.1.tar.gz
+    Installing collected packages: Werkzeug, MarkupSafe, Jinja2, itsdangerous, Flask
+      Running setup.py install for MarkupSafe: started
+        Running setup.py install for MarkupSafe: finished with status 'done'
+      Running setup.py install for Flask: started
+        Running setup.py install for Flask: finished with status 'done'
+    Successfully installed Flask-0.10.1 Jinja2-2.11.3 MarkupSafe-1.1.1 Werkzeug-1.0.1 itsdangerous-1.1.0
+    You are using pip version 9.0.0, however version 21.3.1 is available.
+    You should consider upgrading via the 'pip install --upgrade pip' command.
+    Removing intermediate container 5b59f6d7b137
+     ---> 81c39cee7cb6
+    Step 5/8 : COPY app.py /usr/src/app/
+     ---> 2c5e3d5efbac
+    Step 6/8 : COPY templates/index.html /usr/src/app/templates/
+     ---> f2fc0a841eb8
+    Step 7/8 : EXPOSE 5000
+     ---> Running in 06cec8049ad2
+    Removing intermediate container 06cec8049ad2
+     ---> 2444522f32fd
+    Step 8/8 : CMD ["python", "/usr/src/app/app.py"]
+     ---> Running in 04dedc5a224c
+    Removing intermediate container 04dedc5a224c
+     ---> 5a0f4c662bec
+    Successfully built 5a0f4c662bec
+    Successfully tagged myfirstapp:1.0
+    ```
+
+    
+
+6. 查看当前镜像
+
+    ```
+    $ docker image ls
+    REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+    myfirstapp          1.0                 5a0f4c662bec        2 minutes ago       56.8MB
+    nginx               latest              f6987c8d6ed5        25 hours ago        141MB
+    alpine              3.5                 f80194ae2e0c        2 years ago         4MB
+    ```
+
+    
+
+7. 运行该镜像， 同样我们也做了端口映射。
+
+    ```
+    docker run -p 80:5000 --name myfirstapp myfirstapp:1.0
+    ```
+
+    
+
 8. sdaf
+
 9. 
 
