@@ -21,7 +21,7 @@ A full architecture could be the one presented in this diagram:
 
 ## Access the Labs Using Our Web Interface
 
-**[Click here](https://minqiaowang.github.io/oracle-kubernetes/)** to use our easy to navigate HTML format.
+**[Click here](https://minqiaowang.github.io/oci-k8s-cn/workshops/freetier)** to use our easy to navigate HTML format.
 
 ## Access the labs ##
 
