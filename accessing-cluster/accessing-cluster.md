@@ -2,127 +2,57 @@
 
 ### 简介
 
-在本实验中，你将学会如何通过Cloud Shell或本地机器访问Kubernetes集群。
+Kubernetes集群创建完成后，你可以通过Cloud Shell或本地机器访问Kubernetes集群。用Cloud Shell访问kubernetes集群相对简单，本练习会介绍如果用本地机器访问kubernetes集群。下面，我们会以Lab1中OCI上的虚拟机来模拟本地主机，配置kubernetes集群的访问。
 
-##通过 Cloud Shell访问集群
-
-1. 在**集群详细信息**页面，点击**访问集群**。
-
-   ![image-20210715111023486](images/image-20210715111023486.png)
-
-   
-
-2. 在弹出窗口，点击**复制**，复制访问集群的命令。然后**关闭**窗口。
-
-   ![image-20210715111208188](images/image-20210715111208188.png)
-
-   
-
-3. 点击页面右上角**Cloud Shell**图标。
-
-   ![image-20210715111716825](images/image-20210715111716825.png)
-
-   
-
-4. 页面下部会出现Cloud Shell终端。
-
-   ![](./images/image-20200315120006098.png " ")
-
-   
-
-5. 粘贴步骤 2 中的命令并执行它。 如：
-
-   ```
-   oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.oc1.ap-tokyo-1.aaaaa***gbqt --file $HOME/.kube/config --region ap-tokyo-1 --token-version 2.0.0 
-   ```
-
-   
-
-6. 现在你就可以在Cloud Shell中用kubectl命令来管理kubernetes集群。试试下面的命令：
-
-   ```
-   $ kubectl version
-   Client Version: version.Info{Major:"1", Minor:"14", GitVersion:"v1.14.10", GitCommit:"575467a0eaf3ca1f20eb86215b3bde40a5ae617a", GitTreeState:"clean", BuildDate:"2019-12-11T12:41:00Z", GoVersion:"go1.12.12", Compiler:"gc", Platform:"linux/amd64"}
-   Server Version: version.Info{Major:"1", Minor:"15", GitVersion:"v1.15.7", GitCommit:"4f504dd9ee54a3621502518bc64f0df487587d12", GitTreeState:"clean", BuildDate:"2020-01-23T00:34:28Z", GoVersion:"go1.12.7 BoringCrypto", Compiler:"gc", Platform:"linux/amd64"}
-   $ kubectl get nodes
-   NAME        STATUS   ROLES   AGE   VERSION
-   10.0.10.2   Ready    node    49m   v1.15.7
-   10.0.10.3   Ready    node    49m   v1.15.7
-   10.0.10.4   Ready    node    49m   v1.15.7
-   $ 
-   ```
+### 先决条件
+- 完成创建Kubernetes集群
 
 
 
-##从本地主机访问Kubernetes集群
+## Task 1：了解kubernetes访问配置步骤
 
-下面，我们会用一台OCI上的虚拟机来模拟本地主机。创建虚拟机的步骤已省略，你需要获取虚机的公网IP。
+1. 在之前创建的kubernetes集群详细信息页面，在**资源**下选择**快速启动**，点击**访问集群**。
 
-### 步骤1. 部署虚拟机
+    ![image-20211223152618939](images/image-20211223152618939.png)
 
-1. 部署并获取虚拟机的公网IP。
+2. 这里提供两种访问集群的配置，点击**本地访问权限**。
 
-   ![](./images/image-20200331143606969.png " ")
+    ![image-20211223152734370](images/image-20211223152734370.png)
 
-   
+3. 这里列出了本地访问配置步骤配置的命令。
+
+    ![image-20211223153041393](images/image-20211223153041393.png)
+
+4. sdaf
+
+## Task 2：安装和配置OCI CLI
+
+1. 连接到虚拟主机，运行下面的命令来安装OCI CLI
+
+```
+$ sudo yum install -y python36-oci-cli
+```
 
 
-### 步骤2. 安装和配置OCI CLI
 
-1. 用SSH连接到虚拟主机(Windows上可以用putty)
+
+2. 运行 `oci setup config`命令来配置 OCI CLI. 需要事先查找租户和用户的OCID([参见文档](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#five)). 
+
+   - 接受缺省的config文件路径
+   - 输入自己的用户OCID
+   - 输入租户OCID
+   - 选择对应的区域，如：ap-seoul-1
+   - 需要创建RSA Key pair
+   - 接受缺省的key名
 
    ```
-   $ ssh -i labkey opc@xxx.xxx.xxx.xxx
-   ```
-
-2. 运行下面的命令来安装OCI CLI
-
-   ```
-   bash -c "$(curl -L https://raw.githubusercontent.com/oracle/oci-cli/master/scripts/install/install.sh)"
-   ```
-
-3. 接受缺省参数值
-
-   ```
-     Stored in directory: /tmp/tmp582hHd/wheels/f0/11/d1/8902b10e29e3ce2c8965a86533b76894c844565e02d5341520
-     Building wheel for configparser (setup.py) ... done
-     Created wheel for configparser: filename=configparser-3.5.0-py2-none-any.whl size=21661 sha256=62b501d9a4a5d17b2559eedf67e6a100ca8e5300e795839bad239bfcfec939df
-     Stored in directory: /tmp/tmp582hHd/wheels/fe/e1/b2/ffea2d060a50955b9228e7a1dc7b1fc7a5013dc506da8c5272
-   Successfully built PyYAML retrying terminaltables configparser
-   Installing collected packages: six, pycparser, cffi, ipaddress, enum34, cryptography, certifi, PyYAML, python-dateutil, pyOpenSSL, pytz, configparser, oci, jmespath, retrying, idna, terminaltables, backports.functools-lru-cache, arrow, click, oci-cli
-   Successfully installed PyYAML-5.1.2 arrow-0.14.7 backports.functools-lru-cache-1.6.1 certifi-2019.11.28 cffi-1.14.0 click-6.7 configparser-3.5.0 cryptography-2.8 enum34-1.1.10 idna-2.6 ipaddress-1.0.23 jmespath-0.9.4 oci-2.11.0 oci-cli-2.9.6 pyOpenSSL-18.0.0 pycparser-2.20 python-dateutil-2.8.1 pytz-2019.3 retrying-1.3.3 six-1.14.0 terminaltables-3.1.0
-   
-   ===> Modify profile to update your $PATH and enable shell/tab completion now? (Y/n): Y
-   
-   ===> Enter a path to an rc file to update (leave blank to use '/home/opc/.bashrc'): 
-   -- Backed up '/home/opc/.bashrc' to '/home/opc/.bashrc.backup'
-   -- Tab completion set up complete.
-   -- If tab completion is not activated, verify that '/home/opc/.bashrc' is sourced by your shell.
-   -- 
-   -- ** Run `exec -l $SHELL` to restart your shell. **
-   -- 
-   -- Installation successful.
-   -- Run the CLI with /home/opc/bin/oci --help
-   [opc@oke-bastion ~]$ 
-   ```
-
-4. 运行 `exec -l $SHELL` 重启shell.
-
-   ```
-   [opc@oke-bastion ~]$ exec -l $SHELL
-   [opc@oke-bastion ~]$
-   ```
-
-5. 运行 `oci setup config`命令来配置 OCI CLI. 接受默认目录。拷贝并粘贴租户和用户的OCID(参见 [文档](https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#Other)). 生成新的RSA键值对。
-
-   ```
-   [opc@oke-bastion ~]$ oci setup config
+   $ oci setup config
        This command provides a walkthrough of creating a valid CLI config file.
    
        The following links explain where to find the information required by this
        script:
    
-       User OCID and Tenancy OCID:
+       User API Signing Key, OCID and Tenancy OCID:
    
            https://docs.cloud.oracle.com/Content/API/Concepts/apisigningkey.htm#Other
    
@@ -136,70 +66,80 @@
    
    
    Enter a location for your config [/home/opc/.oci/config]: 
-   Enter a user OCID: ocid1.user.oc1..aaaaaaaau4a24oyl3bj2ings4uzmuhcv7a27jhw6mdu3nqb2aoqs7e4pjmpa
+   Enter a user OCID: ocid1.user.oc1..aaaaaaaadiorkkvqtv22wmeln5yzjwheivsv7djtdv33ospdbipgppgazs4q
    Enter a tenancy OCID: ocid1.tenancy.oc1..aaaaaaaafj37mytx22oquorcznlfuh77cd45int7tt7fo27tuejsfqbybzrq
-   Enter a region (e.g. ap-melbourne-1, ap-mumbai-1, ap-osaka-1, ap-seoul-1, ap-sydney-1, ap-tokyo-1, ca-montreal-1, ca-toronto-1, eu-amsterdam-1, eu-frankfurt-1, eu-zurich-1, me-jeddah-1, sa-saopaulo-1, uk-gov-london-1, uk-london-1, us-ashburn-1, us-gov-ashburn-1, us-gov-chicago-1, us-gov-phoenix-1, us-langley-1, us-luke-1, us-phoenix-1): ap-tokyo-1
-   Do you want to generate a new RSA key pair? (If you decline you will be asked to supply the path to an existing key.) [Y/n]: Y
+   Enter a region by index or name(e.g.
+   1: ap-chiyoda-1, 2: ap-chuncheon-1, 3: ap-hyderabad-1, 4: ap-ibaraki-1, 5: ap-melbourne-1,
+   6: ap-mumbai-1, 7: ap-osaka-1, 8: ap-seoul-1, 9: ap-singapore-1, 10: ap-sydney-1,
+   11: ap-tokyo-1, 12: ca-montreal-1, 13: ca-toronto-1, 14: eu-amsterdam-1, 15: eu-frankfurt-1,
+   16: eu-marseille-1, 17: eu-milan-1, 18: eu-zurich-1, 19: il-jerusalem-1, 20: me-abudhabi-1,
+   21: me-dubai-1, 22: me-jeddah-1, 23: sa-santiago-1, 24: sa-saopaulo-1, 25: sa-vinhedo-1,
+   26: uk-cardiff-1, 27: uk-gov-cardiff-1, 28: uk-gov-london-1, 29: uk-london-1, 30: us-ashburn-1,
+   31: us-gov-ashburn-1, 32: us-gov-chicago-1, 33: us-gov-phoenix-1, 34: us-langley-1, 35: us-luke-1,
+   36: us-phoenix-1, 37: us-sanjose-1): ap-seoul-1
+   Do you want to generate a new API Signing RSA key pair? (If you decline you will be asked to supply the path to an existing key.) [Y/n]: Y
    Enter a directory for your keys to be created [/home/opc/.oci]: 
    Enter a name for your key [oci_api_key]: 
    Public key written to: /home/opc/.oci/oci_api_key_public.pem
    Enter a passphrase for your private key (empty for no passphrase): 
    Private key written to: /home/opc/.oci/oci_api_key.pem
-   Fingerprint: 87:26:7c:f8:0c:dd:6f:d5:e1:d4:c9:60:54:ec:96:9c
+   Fingerprint: 6d:32:0c:63:91:01:82:8e:bd:8c:4f:92:34:53:23:d9
    Config written to /home/opc/.oci/config
    
    
-       If you haven't already uploaded your public key through the console,
-       follow the instructions on the page linked below in the section 'How to
-       upload the public key':
+       If you haven't already uploaded your API Signing public key through the
+       console, follow the instructions on the page linked below in the section
+       'How to upload the public key':
    
            https://docs.cloud.oracle.com/Content/API/Concepts/apisigningkey.htm#How2
    
-   
-   [opc@oke-bastion ~]$ 
    ```
 
-6. 查看公钥内容，拷贝到下一步使用。
+3. 查看公钥内容，拷贝到下一步使用。
 
    ```
-   [opc@oke-bastion ~]$ cat .oci/oci_api_key_public.pem 
+   $ cat .oci/oci_api_key_public.pem 
    -----BEGIN PUBLIC KEY-----
-   MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs+vNX8kMsQmh5TSX73Ha
-   jRfd7dJ7OnmSt125yVMI8X74E6QpGV7Ml6L3/drT8RpzsZM+hLtgFEFJlc2NWDyz
-   9/PijQDGia4KyGR5/9+QBh4vjqSKuis44ppQKknRLEkn0BmKkQn8w5yaQ5WK9iav
-   Kndllrm0L02HvNjlQ5McDZVzqVeGC2Wn+NKceT1K2z3ZSIhB6U99gtNh2gkHKHxe
-   q/OedrlIMeuue415qDLeLSGSfxd+smpKpTf8rOC5vp+J8YPIGV0eP4enPL57DIEo
-   +pS+QY4fcTMSeTs9ma87gXHtHYwP0Ygu/fFJcKg/gd9ctDXZfcYEygxosbORcz1J
-   UwIDAQAB
+   MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAppdx2rsxvCGCLbu9Z2xP
+   txGfP7xkJ68PrrrOh9nPKfSy2uhS2ePR/x9FL58GL9TElwofyel7DbVlPZzSn4UL
+   eG5OXuWHXp7hmWtw6IP0aj2ef7G47D3G9TKMQiB+OfAk8WY5H2b4Ybws8QtVHINs
+   xtLsKfOMWtDWcAJ64JjdwZrp1DUnpOiiI4N6SRnP4PXnvtfwmG9Kw+eA5cGy15vc
+   LFHsOc/yPY6kjp4ctdz4kQScAAa8P+/ZTOXVto0h6lJfGUQJdYZTvOYGlangIRK6
+   VuEWpZ94J9+g73NuRorGLz5CpFQXbBjE9apXIYXWw2eJBXtKN/4L0pdB/JSKllLP
+   LwIDAQAB
    -----END PUBLIC KEY-----
-   [opc@oke-bastion ~]$ 
    ```
 
-7. 在OCI控制台页面，点击左上角**概要信息**然后点击**用户设置**。
+4. 在OCI控制台页面，点击左上角**概要信息**然后点击**用户设置**。
 
-   ![image-20210727114949434](images/image-20210727114949434.png)
+   ![image-20211223155906365](images/image-20211223155906365.png)
 
-8. 在**资源**下选择**API密钥**，然后点击**添加API密钥**。
+5. 在**资源**下选择**API密钥**，然后点击**添加API密钥**。
 
-   ![image-20210727115138591](images/image-20210727115138591.png)
+   ![image-20211223160152107](images/image-20211223160152107.png)
 
-9. 选择**粘贴公共密钥**，然后粘贴前面拷贝公共密钥的内容。点击**添加**。
+6. 选择**粘贴公共密钥**，然后粘贴前面拷贝公共密钥的内容。点击**添加**。
 
-   ![image-20210727115356810](images/image-20210727115356810.png)
+   ![image-20211223160330631](images/image-20211223160330631.png)
 
-10. 回到虚拟机的终端界面，测试OCI CLI命令，如果有正确返回，则配置成功。
+7. 查看配置文件预览，点击**关闭**。每个用户能创建的API密钥数量有限制，如果你是用的共享用户，如：apac-student1，则跳到下一步，用共享的API密钥。
 
-    ```
-    [opc@oke-bastion .oci]$ oci os ns get
-    {
-      "data": "oraclepartnersas"
-    }
-    [opc@oke-bastion .oci]$ 
-    ```
+   ![image-20211223160526674](images/image-20211223160526674.png)
+
+8. （共享用户的步骤）：
+
+9. 回到虚拟机的终端界面，测试OCI CLI命令，如果有正确返回，则配置成功。
+
+   ```
+   $ oci os ns get
+   {
+     "data": "oraclepartnersas"
+   }
+   ```
 
 
 
-### 步骤3. 安装配置kubectl 
+## Task 3：安装配置kubectl 
 
 1. 下载kubectl最新版本:
 
