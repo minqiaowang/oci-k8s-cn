@@ -8,12 +8,12 @@
 
 ### 实验目标
 
-在本练习中，你将学会如何安装Docker环境，如何创建容器镜像，如何保存镜像到远程资料库，如何运行容器以及容器的管理等等。
+在本练习中，你将学会如何安装Docker环境，如何创建容器镜像，如何运行容器以及容器的管理，如何保存镜像到远程资料库等等。
 
 ### 先决条件
 
 - 在OCI上创建一个VM，操作系统为Oracle Linux 7.9，机型选用缺省设置。
-- 在hub.docker.com上注册一个账号，用来存储容器镜像。
+- 在[docker hub](https://hub.docker.com)上注册一个账号，用来存储容器镜像。
 
 
 
@@ -27,7 +27,7 @@
 
     
 
-2. 授权opc用户使用docker命令
+2. 授权opc用户使用docker命令。
 
     ```
     $ <copy>sudo usermod -aG docker opc</copy>
@@ -35,7 +35,7 @@
 
     
 
-3. 启动docker环境
+3. 启动docker环境。
 
     ```
     $ <copy>sudo systemctl enable docker</copy>
@@ -46,7 +46,7 @@
 
 ## Task 2: 运行你的第一个容器
 
-1. 从远程资料库（缺省为hub.docker.com)中拉取一个容器镜像到本地。例如，我们可以拉取一个nginx容器镜像。
+1. 从远程资料库（缺省为[docker hub](hub.docker.com)中拉取一个容器镜像到本地。例如，我们可以拉取一个nginx容器镜像。
 
     ```
     $ <copy>docker pull nginx</copy>
@@ -66,7 +66,7 @@
 
     
 
-2. 查看当前镜像
+2. 查看当前本地镜像。
 
     ```
     $ <copy>docker image ls</copy>
@@ -76,7 +76,7 @@
 
     
 
-3. 基于镜像启动容器。如果镜像不存在，docker会自动去远程资料库拉取镜像文件。
+3. 基于镜像启动容器。如果本地镜像不存在，docker会自动去远程资料库拉取镜像文件。
 
     ```
     $ <copy>docker run -d -it -p 80:80 --name my-nginx nginx</copy>
@@ -85,7 +85,7 @@
 
     
 
-4. 查看容器运行状态，该容器名字为`my-nginx`，本虚机的80端口映射到容器的80端口。
+4. 查看容器运行状态，当前状态（STATUS）是运行状态。该容器名字为`my-nginx`，本虚机的80端口映射到容器的80端口，
 
     ```
     $ <copy>docker ps -a</copy>
@@ -115,7 +115,7 @@
 
     
 
-7. 查看该容器的ip地址，可以看到该主机名就是CONTAINER ID。
+7. 查看该容器的ip地址，可以看到该容器内部IP和主机名（缺省就是CONTAINER ID）。
 
     ```
     root@9270794f6c08:/# <copy>cat /etc/hosts</copy>
@@ -141,7 +141,7 @@
 
     
 
-9. 访问nginx容器80端口。使用刚才查询到的容器ip地址。
+9. 从虚机访问nginx容器80端口。使用刚才查询到的容器ip地址。
 
     ```
     $ <copy>curl http://172.17.0.2</copy>
@@ -172,7 +172,7 @@
 
     
 
-10. 要让外部客户端访问虚机的80端口，我们必须先修改一下防火墙的设置。运行下列命令。
+10. 要让外部客户端访问容器内部的80端口，可以通过虚机的端口映射。虚机的80端口缺省是没有打开的，我们必须先修改一下防火墙的设置。运行下列命令。
 
     ```
     $ <copy>sudo firewall-cmd --zone=public --add-port=80/tcp --permanent</copy>
@@ -213,9 +213,9 @@
 
 ## Task 3：创建一个自己的容器镜像
 
-你可以从头开始创建容器镜像，也可以使用一个现有的镜像，在里面安装自己的应用。下面我们会从一个现有镜像alpine开始。Alpine是一个轻量级的Linux发行版，包含linux的核心组件。我们已经写好了一个python应用，该程序在每次调用时会随机加载一些图片。
+要创建自己的容器镜像，你可以从头开始创建容器镜像，也可以使用一个现有的镜像，在里面安装自己的应用。下面我们会从一个现有镜像Alpine开始。Alpine是一个轻量级的Linux发行版，包含linux的核心组件。我们已经写好了一个python应用，该程序在每次调用时会随机加载一些图片。
 
-1. 下载应用程序
+1. 下载python应用程序。
 
     ```
     $ <copy>wget https://github.com/minqiaowang/oci-k8s-cn/raw/main/docker-container-fundation/flask-app.zip</copy>
@@ -254,7 +254,7 @@
 
     
 
-3. 进入子目录。感兴趣的可以查看一下该python应该的脚本。
+3. 进入应用程序子目录。感兴趣的可以查看一下该python应用的脚本。
 
     ```
     $ <copy>cd flask-app</copy>
@@ -264,7 +264,7 @@
 
     
 
-4. 在该目录下编辑一个名为Dockerfile的文件。拷贝如下内容到该文件中。
+4. 在该目录下新建一个名为Dockerfile的文件。拷贝如下内容到该文件中。
 
     ```
     <copy>
@@ -290,16 +290,16 @@
     </copy>
     ```
 
-    Dockerfile是用来构建docker image的描述文件，在该文件中我们可以看到镜像文件的生成过程。
+    Dockerfile是用来构建容器镜像的描述文件，在该文件中我们可以看到镜像文件的生成过程。
 
-    - 从基础镜像alpine:3.5开始
+    - 从基础镜像alpine:3.5开始，如果本地没有该镜像，则从远端资料库中拉取过来。
     - 安装python和pip包
     - 安装应用所需的模块
     - 拷贝应用程序到容器内部相应目录
     - 在容器内部打开5000端口
-    - 容器启动时要运行的应用程序
+    - 容器启动时运行应用程序
 
-5. 生成容器镜像，命名为`myfirstapp:1.0`。
+5. 使用docker bulid命令生成容器镜像，命名为myfirstapp，版本为1.0。我们可以看到生成过程就是按照Dockerfile里描述的步骤进行的。
 
     ```
     $ <copy>docker build -t myfirstapp:1.0 .</copy>
@@ -373,10 +373,10 @@
 
     
 
-6. 查看当前镜像
+6. 查看当前镜像。可以看到增加了基础的alpine镜像和我们创建的myfirstapp镜像。
 
     ```
-    $ docker image ls
+    $ <copy>docker image ls</copy>
     REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
     myfirstapp          1.0                 5a0f4c662bec        2 minutes ago       56.8MB
     nginx               latest              f6987c8d6ed5        25 hours ago        141MB
@@ -388,12 +388,356 @@
 7. 运行该镜像， 同样我们也做了端口映射。
 
     ```
-    docker run -p 80:5000 --name myfirstapp myfirstapp:1.0
+    $ <copy>docker run -p 80:5000 --name myfirstapp myfirstapp:1.0</copy>
+     * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
     ```
 
     
 
-8. sdaf
+8. 打开浏览器，访问`http://<yourVM-publicIP>:80`，刷新几次页面，可以看到不同的照片。
 
-9. 
+    ![image-20211222141534732](images/image-20211222141534732.png)
+
+9. 在命令行终端按`Control+C`退出容器应用。
+
+    ```
+    202.45.129.182 - - [22/Dec/2021 06:14:47] "GET / HTTP/1.1" 200 -
+    202.45.129.182 - - [22/Dec/2021 06:14:49] "GET /favicon.ico HTTP/1.1" 404 -
+    202.45.129.182 - - [22/Dec/2021 06:14:52] "GET / HTTP/1.1" 200 -
+    202.45.129.182 - - [22/Dec/2021 06:14:57] "GET / HTTP/1.1" 200 -
+    202.45.129.182 - - [22/Dec/2021 06:15:04] "GET / HTTP/1.1" 200 -
+    202.45.129.182 - - [22/Dec/2021 06:15:09] "GET / HTTP/1.1" 200 -
+    ^C $ 
+    ```
+
+    
+
+10. 运行下列命令，我们可以看到该容器目前是停止状态（Exited）。
+
+    ```
+    $ <copy>docker ps -a</copy>
+    CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                          PORTS               NAMES
+    18571dd8f0ad        myfirstapp:1.0      "python /usr/src/app…"   7 minutes ago       Exited (0) About a minute ago                       myfirstapp
+    
+    ```
+
+    
+
+11. 删除该容器。
+
+    ```
+    $ <copy>docker rm myfirstapp</copy>
+    myfirstapp
+    ```
+
+    
+
+12. sad
+
+## Task 4：保存容器镜像
+
+我们可以将新建的容器镜像保存到远端的资料库中，缺省是[docker hub](http://hub.docker.com)，也可以保存到OCI的容器注册表里。
+
+1. 登录到缺省资料库。使用你在[docker hub](http://hub.docker.com)中注册的用户名和密码。
+
+    ```
+    $ <copy>docker login</copy>
+    Login with your Docker ID to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com to create one.
+    Username: <your_username>
+    Password: 
+    WARNING! Your password will be stored unencrypted in /home/opc/.docker/config.json.
+    Configure a credential helper to remove this warning. See
+    https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+    
+    Login Succeeded
+    [opc@docker-test ~]$ 
+    ```
+
+    
+
+2. 查看现在的本地镜像，记住对应的IMAGE ID。
+
+    ```
+    $ <copy>docker image ls</copy>
+    REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+    myfirstapp          1.0                 806493459c66        19 minutes ago      56.8MB
+    nginx               latest              f6987c8d6ed5        28 hours ago        141MB
+    alpine              3.5                 f80194ae2e0c        2 years ago         4MB
+    ```
+
+    
+
+3. 给该镜像文件打标签，使用你自己的image id，标签格式为`<your_username>/myfirstapp:1.0`。
+
+    ```
+    $ docker tag 806493459c66 minqiao/myfirstapp:1.0
+    ```
+
+    
+
+4. 我们可以看到本地多了一个刚打标签的镜像。
+
+    ```
+    $ <copy>docker image ls</copy>
+    REPOSITORY           TAG                 IMAGE ID            CREATED             SIZE
+    myfirstapp           1.0                 806493459c66        34 minutes ago      56.8MB
+    minqiao/myfirstapp   1.0                 806493459c66        34 minutes ago      56.8MB
+    nginx                latest              f6987c8d6ed5        28 hours ago        141MB
+    alpine               3.5                 f80194ae2e0c        2 years ago         4MB
+    ```
+
+    
+
+5. 将镜像推送到远端资料库。请使用你自己的远端资料库的用户名：`<your_username>/myfirstapp:1.0`。
+
+    ```
+    $ docker push minqiao/myfirstapp:1.0
+    The push refers to repository [docker.io/minqiao/myfirstapp]
+    1f09448d385f: Pushed 
+    8748692e5262: Pushed 
+    884a6d3aa5f2: Pushed 
+    0e47bab4fb03: Pushed 
+    33f2343ca1e4: Pushed 
+    f566c57e6f2d: Mounted from library/alpine 
+    1.0: digest: sha256:ff8252c696b55797f64ed60fe72a69e79b2b6cfeea98bac4f538cae4fcbda3c4 size: 1571
+    ```
+
+    
+
+6. 如果要将镜像保存到OCI的容器注册表中，我们需要先在OCI中创建一个资料档案库。进入OCI主菜单，选择**开发人员服务**，点击**容器注册表**。
+
+    ![image-20211222150819134](images/image-20211222150819134.png)
+
+7. 确定选择正确的区域和区间，点击**创建资料档案库**。
+
+    ![image-20211222150953175](images/image-20211222150953175.png)
+
+8. 输入**资料档案库名称**，如：student01。点击**创建资料档案库**。
+
+    ![image-20211222151032710](images/image-20211222151032710.png)
+
+9. 资料档案库创建完成。
+
+    ![image-20211222151303570](images/image-20211222151303570.png)
+
+10. 要访问资料档案库，还需要一个验证令牌。点击右上角头像，选择**用户设置**。
+
+    ![image-20211222151420236](images/image-20211222151420236.png)
+
+11. 选择**验证令牌**，然后点击**生成令牌**。
+
+    ![image-20211222151623161](images/image-20211222151623161.png)
+
+12. 输入令牌**说明**，如：ocr-token，点击**生成令牌**。
+
+    ![image-20211222152400678](images/image-20211222152400678.png)
+
+13. 点击复制令牌并保存到安全的地方，一旦关闭，令牌就不可见。每个用户最多只能创建两个令牌，如果是共享用户apac-student1，则可以不用创建令牌，请使用共享的令牌：`om[v]WJ89-m8oCYE}qgQ`
+
+    ![image-20211222152528149](images/image-20211222152528149.png)
+
+14. 回到命令行终端，执行命令注册到OCI的容器注册表：`docker login <region-key>.ocir.io`。其中Seoul的region-key 为icn，Chuncheon的region-key为yny。其它数据中心的region-key请查看[相关的网页](https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm)。
+
+    - 输入的用户格式为：<tenancy-namespace>/<username>，tenancy-namespace为OCI对象存储名称空间，缺省与租户名相同，在OCI租户信息页面能查到。username为OCI登录名，如：oraclepartnersas/apac-student1。
+    - 密码为之前创建的令牌。
+
+    ```
+    $ <copy>docker login icn.ocir.io</copy>
+    Username: oraclepartnersas/apac-student1
+    Password: 
+    WARNING! Your password will be stored unencrypted in /home/opc/.docker/config.json.
+    Configure a credential helper to remove this warning. See
+    https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+    
+    Login Succeeded
+    ```
+
+    
+
+15. 查看当前本地镜像。
+
+    ```
+    $ <copy>docker image ls</copy>
+    REPOSITORY           TAG                 IMAGE ID            CREATED             SIZE
+    myfirstapp           1.0                 806493459c66        20 hours ago        56.8MB
+    minqiao/myfirstapp   1.0                 806493459c66        20 hours ago        56.8MB
+    nginx                latest              f6987c8d6ed5        47 hours ago        141MB
+    alpine               3.5                 f80194ae2e0c        2 years ago         4MB
+    ```
+
+    
+
+16. 给目标镜像打上新的标签，格式为：`<region-key>.ocir.io/<tenancy-namespace>/<repo-name>:<tag>`。
+
+    - region-key：为你的容器注册表所在[区域key](https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm)。
+    - tenancy-namespace：为OCI对象存储名称空间，在OCI租户信息页面能查到。
+    - repo-name：你之前在容器注册表里创建的资料库名，如：student01
+    - tag：给该容器镜像打的标签。
+
+    ```
+    $ <copy>docker tag 806493459c66 icn.ocir.io/oraclepartnersas/student01:myfirstapp-v1.0</copy>
+    ```
+
+    
+
+17. 查看当前本地镜像，注意新的标签镜像已经生成。
+
+    ```
+    $ <copy>docker image ls</copy>
+    REPOSITORY                               TAG                 IMAGE ID            CREATED             SIZE
+    icn.ocir.io/oraclepartnersas/student01   myfirstapp-v1.0     806493459c66        20 hours ago        56.8MB
+    myfirstapp                               1.0                 806493459c66        20 hours ago        56.8MB
+    minqiao/myfirstapp                       1.0                 806493459c66        20 hours ago        56.8MB
+    nginx                                    latest              f6987c8d6ed5        47 hours ago        141MB
+    alpine                                   3.5                 f80194ae2e0c        2 years ago         4MB
+    ```
+
+    
+
+18. 推送镜像到OCI的容器注册表中。请使用你自己的标签格式。
+
+    ```
+    $ <copy>docker push icn.ocir.io/oraclepartnersas/student01:myfirstapp-v1.0</copy>
+    The push refers to repository [icn.ocir.io/oraclepartnersas/student01]
+    1f09448d385f: Pushed 
+    8748692e5262: Pushed 
+    884a6d3aa5f2: Pushed 
+    0e47bab4fb03: Pushed 
+    33f2343ca1e4: Pushed 
+    f566c57e6f2d: Pushed 
+    myfirstapp-v1.0: digest: sha256:ff8252c696b55797f64ed60fe72a69e79b2b6cfeea98bac4f538cae4fcbda3c4 size: 1571
+    ```
+
+    
+
+19. 在OCI控制台里，可以查询到推送的镜像。
+
+    ![image-20211223102023199](images/image-20211223102023199.png)
+
+20. dsf
+
+## Task 5: 运行新的自定义容器
+
+1. 查看当前本地容器镜像。
+
+    ```
+    $ <copy>docker image ls</copy>
+    REPOSITORY                               TAG                 IMAGE ID            CREATED             SIZE
+    minqiao/myfirstapp                       1.0                 806493459c66        21 hours ago        56.8MB
+    icn.ocir.io/oraclepartnersas/student01   myfirstapp-v1.0     806493459c66        21 hours ago        56.8MB
+    myfirstapp                               1.0                 806493459c66        21 hours ago        56.8MB
+    nginx                                    latest              f6987c8d6ed5        2 days ago          141MB
+    alpine                                   3.5                 f80194ae2e0c        2 years ago         4MB
+    ```
+
+    
+
+2. 删除所有本地容器镜像。请使用你自己的IMAGE ID。
+
+    ```
+    $ <copy>docker rmi -f 806493459c66 f6987c8d6ed5 f80194ae2e0c</copy>
+    Untagged: myfirstapp:1.0
+    Untagged: minqiao/myfirstapp:1.0
+    Untagged: minqiao/myfirstapp@sha256:ff8252c696b55797f64ed60fe72a69e79b2b6cfeea98bac4f538cae4fcbda3c4
+    Untagged: icn.oci.io/oraclepartnersas/student01:myfirstapp-v1.0
+    Untagged: icn.ocir.io/oraclepartnersas/student01:myfirstapp-v1.0
+    Untagged: icn.ocir.io/oraclepartnersas/student01@sha256:ff8252c696b55797f64ed60fe72a69e79b2b6cfeea98bac4f538cae4fcbda3c4
+    Deleted: sha256:806493459c6699af46f9ad0f9a97ad577c7c27d58de76b799766cf5bde268c34
+    Deleted: sha256:18c9c7828873b0fba9239c4f723c81bf9c966c76ea758d3163d82848355753eb
+    Deleted: sha256:8ac8589761740c7439c00a56b3ebc5dab2f0deefcf3610ceb870e5be2af9c480
+    Deleted: sha256:4c962e3e586a6b9662f04760421361ed10b3d18c5b087538cd02bc1fd5e6a19c
+    Deleted: sha256:21f6565f243c0b251c1575546d58d1a88416b55628218d3c13ebcb3d6513c637
+    Deleted: sha256:515599880544dd14c9c0b735431581b08db015904393e77438da7a1238bb5072
+    Deleted: sha256:2390329bae5df3b343f5bd9bdada6d99f7dce8a463ccd88347d3cf8ef61b8c45
+    Deleted: sha256:a9dd5f8750cbb1a7e7efaec6912597879fbdcaaed73a10d8b38f663db8ccad00
+    Deleted: sha256:3cbff5cb8fa47768ca9b0dae9106cc44b04e10dd584a1d2afa5c382b4a658a6c
+    Deleted: sha256:f6a1781ae650ead20b4c8f189959fc94fbeadfb38ca912b5bc91128d5b82c158
+    Deleted: sha256:ebe66610d6dca470bdd0b5516f073bbefadb7f3f82dc24a87a386c4830348925
+    Deleted: sha256:fd076500e76b57d1c70601b847eef1bf4761a6b11cdd36f83e3a372247ff0729
+    Untagged: alpine:3.5
+    Untagged: alpine@sha256:66952b313e51c3bd1987d7c4ddf5dba9bc0fb6e524eed2448fa660246b3e76ec
+    Deleted: sha256:f80194ae2e0ccf0f098baa6b981396dfbffb16e6476164af72158577a7de2dd9
+    Deleted: sha256:f566c57e6f2da2364c14195c832b922fd8f4813fd139b8fe45e3454c16e33975
+    Untagged: nginx:latest
+    Untagged: nginx@sha256:366e9f1ddebdb844044c2fafd13b75271a9f620819370f8971220c2b330a9254
+    Deleted: sha256:f6987c8d6ed59543e9f34327c23e12141c9bad1916421278d720047ccc8e1bee
+    Deleted: sha256:7a9fa9abb8f38aafaef0a3d61bc83022234ab9319cfb808cbc1c3ef54871e169
+    Deleted: sha256:ca445a5b504f4cc47b9770500a1ed358052e1ad84a5b668eb0ea3094cc3d381f
+    Deleted: sha256:11fb178a72e8116c0d9e200045d287acb4f97386126c21dc66ce23ff75e64616
+    Deleted: sha256:bcfff1a0df2b9155f1a2e61f811e9e47fdc22b8ddf590c044959e5680233e230
+    Deleted: sha256:8f50608b8231a17100a2b41350fb797999a366b138b483fec7a5ceee86deff91
+    Deleted: sha256:2edcec3590a4ec7f40cf0743c15d78fb39d8326bc029073b41ef9727da6c851f
+    ```
+
+    
+
+3. 当前本地容器镜像为空。
+
+    ```
+    $ <copy>docker image ls</copy>
+    REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+    ```
+
+    
+
+4. 我们可以运行之前创建的容器，根据标签不同，docker会自动从docker hub或OCI容器注册表中下载容器镜像然后运行。
+
+    ```
+    <copy>docker run -p 80:5000 --name myfirstapp icn.ocir.io/oraclepartnersas/student01:myfirstapp-v1.0</copy>
+    Unable to find image 'icn.ocir.io/oraclepartnersas/student01:myfirstapp-v1.0' locally
+    Trying to pull repository icn.ocir.io/oraclepartnersas/student01 ... 
+    myfirstapp-v1.0: Pulling from icn.ocir.io/oraclepartnersas/student01
+    8cae0e1ac61c: Pull complete 
+    de1e02f49d1d: Pull complete 
+    bf2131e659d8: Pull complete 
+    2cf30f8f81a6: Pull complete 
+    fd2ef6714a06: Pull complete 
+    fc055602a480: Pull complete 
+    Digest: sha256:ff8252c696b55797f64ed60fe72a69e79b2b6cfeea98bac4f538cae4fcbda3c4
+    Status: Downloaded newer image for icn.ocir.io/oraclepartnersas/student01:myfirstapp-v1.0
+     * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+    ```
+
+    
+
+5. 打开浏览器，访问`http://<yourVM_PublicIP>:80`。刷新页面，返回的图片不同。
+
+    ![image-20211223105854515](images/image-20211223105854515.png)
+
+6. 在命令行终端按`control+c`，退出应用。
+
+    ```
+     * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+    202.45.129.182 - - [23/Dec/2021 02:57:57] "GET / HTTP/1.1" 200 -
+    202.45.129.182 - - [23/Dec/2021 02:58:04] "GET / HTTP/1.1" 200 -
+    202.45.129.182 - - [23/Dec/2021 02:58:07] "GET / HTTP/1.1" 200 -
+    202.45.129.182 - - [23/Dec/2021 02:58:15] "GET / HTTP/1.1" 200 -
+    202.45.129.182 - - [23/Dec/2021 02:58:20] "GET / HTTP/1.1" 200 -
+    202.45.129.182 - - [23/Dec/2021 02:58:32] "GET / HTTP/1.1" 200 -
+    ^C $ 
+    ```
+
+    
+
+7. 删除该容器。
+
+    ```
+    $ docker rm myfirstapp
+    myfirstapp
+    ```
+
+    
+
+8. 查看本地容器镜像，可以看到镜像已经下载到本地。
+
+    ```
+    $ docker image ls
+    REPOSITORY                               TAG                 IMAGE ID            CREATED             SIZE
+    icn.ocir.io/oraclepartnersas/student01   myfirstapp-v1.0     806493459c66        21 hours ago        56.8MB
+    
+    ```
+
+    
+
+9. sdf
 

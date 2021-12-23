@@ -1,43 +1,25 @@
 {
-    "workshoptitle": "19c ADG Fundamentals",
+    "workshoptitle": "Oracle Container Engine for Kubernetes",
     "tutorials": [
         {           
-            "title": "Introduction",
+            "title": "简介",
             "filename": "../../introduction/introduction.md"
         },
-        {
-            "title": "Getting Started",
-            "description": "This is the prerequisites for customers using Free Trial and Paid tenancies, and Always Free accounts (if applicable). The title of the lab and the Contents Menu title (the title above) match for Prerequisite lab. This lab is always first.",
-            "filename": "https://raw.githubusercontent.com/oracle/learning-library/master/common/labs/cloud-login/pre-register-free-tier-account.md"
+        {            
+            "title": "Lab 1: Docker容器基础",
+            "filename": "../../docker-container-fundation/docker-container-fundation.md"
         },
         {            
-            "title": "Lab 1: Environment Setup",
-            "filename": "../../setup-environment/setup-environment.md"
+            "title": "Lab 2: 创建Kubernetes集群",
+            "filename": "../../create-kubernetes-cluster/create-kubernetes-cluster.md"
         },
         {            
-            "title": "Lab 2: Prepare the Primary Database",
-            "filename": "../../prepare-primary/prepare-primary.md"
+            "title": "Lab 3: 访问Kubernetes集群",
+            "filename": "../../accessing-cluster/accessing-cluster.md"
         },
         {            
-            "title": "Lab 3: Setup Connectivity Between Primary and Standby",
-            "filename": "../../connect-primary-standby/connect-primary-standby.md"
-        },
-        {            
-            "title": "Lab 4: Deploy Active Data Guard",
-            "filename": "../../deploy-adg-lvm/deploy-adg-lvm.md"
-        },
-        {            
-            "title": "Lab 5: Testing with Active Data Guard and Perform a Switchover",
-            "filename": "../../test-with-adg/test-with-adg.md"
-        },
-        {            
-            "title": "Lab 6: Perform a Failover",
-            "filename": "../../failover-and-reinstate/failover-and-reinstate.md"
-        },
-        {
-            "title": "Need Help?",
-            "description": "Solutions to Common Problems and Directions for Receiving Live Help",
-            "filename":"https://raw.githubusercontent.com/oracle/learning-library/master/common/labs/need-help/need-help-freetier.md"
+            "title": "Lab 4: 部署简单应用",
+            "filename": "../../deploy-sample-app/deploy-sample-app.md"
         }
     ]
 }

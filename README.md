@@ -2,17 +2,7 @@
 
 ## Workshop Overview ##
 
-This lab show you a seamless integration between an application deployed inside the kubernetes cluster and an oracle database.
-
-Using the REST database interface to provisioning new database containers, a PDB, or even cloning existing one. Allows to use any Oracle Database with multitenant option in a DBaaS fashion in any environment (cloud, on-prem or hybrid)
-
-The complexity of managing the connections to the database is abstracted by the usage of the Oracle Connection Manager so to have a "standard" kubernetes developer experience.
-
-The operator creates a secret containing all the info for the connection, the visibility of which can be limited to the application itself so to achieve isolation of credentials.
-
-A full architecture could be the one presented in this diagram:
-
-![architecture](images/architecture.png)
+This lab show you a seamless integration between an application deployed inside the kubernetes cluster.
 
 ## Workshop Requirements
 
