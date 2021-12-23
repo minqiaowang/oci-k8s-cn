@@ -128,7 +128,7 @@ $ sudo yum install -y python36-oci-cli
 
 8. （共享用户的步骤）：
 
-9. 回到虚拟机的终端界面，测试OCI CLI命令，如果有正确返回，则配置成功。
+9. 在虚拟机的终端界面，测试OCI CLI命令，如果有正确返回，则配置成功。
 
    ```
    $ oci os ns get
