@@ -1,6 +1,6 @@
 # 创建Kubernetes集群 
 
-### 简介
+## 简介
 
 通过本练习，你将学习到如何在OCI上创建 Kubernetes集群。
 

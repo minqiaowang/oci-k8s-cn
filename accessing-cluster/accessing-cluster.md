@@ -1,6 +1,6 @@
 # 访问Kubernetes集群
 
-### 简介
+## 简介
 
 Kubernetes集群创建完成后，你可以通过Cloud Shell或本地机器访问Kubernetes集群。用Cloud Shell访问kubernetes集群相对简单，本练习会介绍如果用本地机器访问kubernetes集群。下面，我们会以Lab1中OCI上的虚拟机来模拟本地主机，配置kubernetes集群的访问。
 
