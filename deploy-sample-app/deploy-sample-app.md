@@ -1,8 +1,8 @@
-# 部署样例Ngnix应用程序
+# 部署样例应用程序
 
-### 简介
+## 简介
 
-在创建了Kubernetes集群之后，您通常希望通过在集群中的节点上部署应用程序来进行尝试。在下面的步骤中，您将在3个pod上部署一个Nginx示例应用程序，并创建一个负载平衡器来在分配给该服务的节点之间分配服务流量。
+在创建了Kubernetes集群之后，您可以尝试在集群中的节点上部署应用程序。在下面的步骤中，您将把之前创建的容器镜像部署在集群中，相同的应用程序运行在3个pod中，由一个负载平衡器来在分配给该服务的节点之间分配服务流量。
 
 ### 先决条件
 
@@ -10,64 +10,70 @@
 - 成功访问kubernetes集群
 - 配置了自定义的容器镜像
 
-1. 在虚机终端上，编辑一个文件 `nginx_lb.yaml`.
+## Task 1：部署样例应用程序
+
+1. 在虚机终端上，编辑一个文件 `myfirstapp_lb.yaml`。将下面的内容拷贝到文件中。
+
+   - `kind: Deployment`: 为应用程序定义了一个部署
+   - `replicas: 3`: 运行3个pods
+   - `image: <your_name>/myfirstapp:1.0`: 要运行的容器镜像，请使用你在docker hub中注册的用户名，如果本地镜像不存在，则从远程资料库中获取。 
+   - `type: LoadBalancer`: 定义了一个类型为LoadBalancer的服务, 用于负载均衡到后端的应用程序。
 
    ```
-   $ vi nginx_lb.yaml
-   ```
-
-2. 将下面的内容拷贝到文件中。Copy the following content into the file. It defines a deployment (`kind: Deployment`) for the `nginx` app, followed by a service definition with a type of LoadBalancer (`type: LoadBalancer`) that balances http traffic on port 80 for the `nginx` app. Save and exit the editor.它为nginx应用程序定义了一个部署（`kind:deployment`），并且定义了一个服务，该服务定义的类型为LoadBalancer（`type:LoadBalancer`），用于负载均衡nginx应用程序端口80上的http流量。保存并退出编辑器。
-
-   ```
+   <copy>
    apiVersion: apps/v1
    kind: Deployment
    metadata:
-     name: my-nginx
+     name: myapp
      labels:
-       app: nginx
+       app: myapp
    spec:
      replicas: 3
      selector:
        matchLabels:
-         app: nginx
+         app: myapp
      template:
        metadata:
          labels:
-           app: nginx
+           app: myapp
        spec:
          containers:
-         - name: nginx
-           image: nginx:1.7.9
+         - name: myapp
+           image: minqiao/myfirstapp:1.0
            ports:
-           - containerPort: 80
+           - containerPort: 5000
+             protocol: TCP
    ---
    apiVersion: v1
    kind: Service
    metadata:
-     name: my-nginx-svc
+     name: myapp-svc
      labels:
-       app: nginx
+       app: myapp
    spec:
      type: LoadBalancer
      ports:
      - port: 80
+       protocol: TCP
+       targetPort: 5000
      selector:
-       app: nginx
+       app: myapp
+   </copy>
    ```
 
-3. 要在kubernetes集群中创建`nginx_lb.yaml`文件中定义的部署和服务，运行下面的命令：
+3. 要在kubernetes集群中创建`myfirstapp_lb.yaml`文件中定义的部署和服务，运行下面的命令：
 
    ```
-   [opc@oke-bastion ~]$ kubectl apply -f nginx_lb.yaml
+   [opc@oke-bastion ~]$ kubectl apply -f myfirstapp_lb.yaml
    deployment.apps/my-nginx created
    service/my-nginx-svc created
    [opc@oke-bastion ~]$ 
    ```
 
-4. 负载均衡器从挂起状态到完全运行可能需要几分钟的时间。您可以通过输入`kubectl get all`查看集群的当前状态，其中的输出类似于以下内容：
+3. 负载均衡器从挂起状态到完全运行可能需要几分钟的时间。您可以通过输入`kubectl get pod,svc`查看集群pod和服务的运行状态，其中的输出类似于以下内容：
 
    ```
-   [opc@oke-bastion ~]$ kubectl get all
+   $ kubectl get pod,svc
    NAME                            READY   STATUS    RESTARTS   AGE
    pod/my-nginx-5d59d67564-2tjbv   1/1     Running   0          95s
    pod/my-nginx-5d59d67564-mkldp   1/1     Running   0          95s
@@ -82,26 +88,26 @@
    
    NAME                                  DESIRED   CURRENT   READY   AGE
    replicaset.apps/my-nginx-5d59d67564   3         3         3       96s
-   [opc@oke-bastion ~]$ 
+   
    ```
 
-5. 输出显示`my-nginx`应用正在3个pod（pod/my-nginx）上运行，负载均衡器正在运行（service/my-nginx-svc），并且有一个外部IP（146.56.187.83），客户端可以使用该IP连接到部署在pod上的应用程序。
+   - 输出显示`myapp`应用正在3个pod（pod/myapp）上运行，负载均衡器正在运行（service/myapp-svc），并且有一个外部IP（146.56.187.83），客户端可以使用该IP连接到部署在pod上的应用程序。
 
-6. 打开浏览器, 输入 url `http://146.56.187.83`, 你可以看到Ngnix应用正在运行。
+6. 打开浏览器, 输入 url `http://<your_lb_publicIP>`, 你可以看到应用运行正常。
 
-   ![image-20210727123753014](images/image-20210727123753014.png)
+   ![image-20211224151052651](images/image-20211224151052651.png)
 
-7. 如果是在公司内网或其他有限制的网络环境下，会出现下列错误信息，不允许http访问。![image-20210714153724741](images/image-20210714153724741.png)
+7. 如果是在公司内网或其他有限制的网络环境下，会出现下列错误信息，不允许http访问。可以采用其他网络进行访问。![image-20210714153724741](images/image-20210714153724741.png)
 
    
 
-8. 你可以用以下命令来删除Ngnix应用和负载均衡服务。
+8. 用以下命令来删除部署的应用和负载均衡服务。
 
    ```
-   [opc@oke-bastion ~]$ kubectl delete -f nginx_lb.yaml 
-   deployment.apps "my-nginx" deleted
-   service "my-nginx-svc" deleted
-   [opc@oke-bastion ~]$
+   $ kubectl delete -f myfirstapp_lb.yaml 
+   deployment.apps "myapp" deleted
+   service "myapp-svc" deleted
+   $
    ```
 
    

@@ -46,7 +46,7 @@
 
 ## Task 2：运行你的第一个容器
 
-1. 从远程资料库（缺省为[docker hub](hub.docker.com)中拉取一个容器镜像到本地。例如，我们可以拉取一个nginx容器镜像。
+1. 从远程资料库（缺省从[docker hub](hub.docker.com)中拉取一个容器镜像到本地。例如，我们可以拉取一个nginx容器镜像。
 
     ```
     $ <copy>docker pull nginx</copy>
@@ -78,8 +78,12 @@
 
 3. 基于镜像启动容器。如果本地镜像不存在，docker会自动去远程资料库拉取镜像文件。
 
+    - `-d`: 容器在后台运行
+    - `-p`: 设置主机端口与容器端口映射
+    - `--name`: 容器命名 
+
     ```
-    $ <copy>docker run -d -it -p 80:80 --name my-nginx nginx</copy>
+    $ <copy>docker run -d -p 80:80 --name my-nginx nginx</copy>
     d69ac4187f0da6bc41a9e3f8288e07d7a7c8545563f6322dc6ba3a5ca7da3fa1
     ```
 
@@ -207,7 +211,7 @@
 
     
 
-15. sdaf
+    
 
 
 
@@ -385,7 +389,7 @@
 
     
 
-7. 运行该镜像， 同样我们也做了端口映射。
+7. 运行该镜像， 同样我们也做了端口映射。暂时不要退出该终端。
 
     ```
     $ <copy>docker run -p 80:5000 --name myfirstapp myfirstapp:1.0</copy>
@@ -432,7 +436,7 @@
 
     
 
-12. sad
+    
 
 ## Task 4：保存容器镜像
 

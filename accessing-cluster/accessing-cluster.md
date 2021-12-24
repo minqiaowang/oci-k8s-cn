@@ -126,12 +126,38 @@ $ sudo yum install -y python36-oci-cli
 
    ![image-20211223160526674](images/image-20211223160526674.png)
 
-8. （共享用户的步骤）：
+8. （共享用户的步骤）：下载共享的密钥对。
+
+   ```
+   $ <copy>wget https://objectstorage.ap-seoul-1.oraclecloud.com/p/fwn_EcTle9oKximyb0GMsC98WFebonvdhI1GKwl2Rv3h8hwk7BDtRHJM_rL7wOxk/n/oraclepartnersas/b/ADWLab/o/oci_api_key.zip</copy>
+   ```
+
+   
+
+9. （共享用户的步骤）：解压到相应目录下，覆盖原有key文件。
+
+   ```
+   $ <copy>unzip oci_api_key.zip -d /home/opc/.oci/.</copy>
+   Archive:  oci_api_key.zip
+   replace /home/opc/.oci/./oci_api_key_public.pem? [y]es, [n]o, [A]ll, [N]one, [r]ename: A
+     inflating: /home/opc/.oci/./oci_api_key_public.pem  
+     inflating: /home/opc/.oci/./oci_api_key.pem 
+   ```
+
+   
+
+10. （共享用户的步骤）：修改文件权限。
+
+   ```
+   $ <copy>chmod 600 /home/opc/.oci/oci_api_key.pem</copy>
+   ```
+
+   
 
 9. 在虚拟机的终端界面，测试OCI CLI命令，如果有正确返回，则配置成功。
 
    ```
-   $ oci os ns get
+   $ <copy>oci os ns get</copy>
    {
      "data": "oraclepartnersas"
    }
@@ -139,71 +165,61 @@ $ sudo yum install -y python36-oci-cli
 
 
 
-## Task 3：安装配置kubectl 
+## Task 3：安装配置kubectl
 
 1. 下载kubectl最新版本:
 
    ```
-   [opc@oke-bastion ~]$ curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
+   $ curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
      % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                     Dload  Upload   Total   Spent    Left  Speed
-   100 41.4M  100 41.4M    0     0  46.3M      0 --:--:-- --:--:-- --:--:-- 46.2M
-   [opc@oke-bastion ~]$ 
+   100   154  100   154    0     0    450      0 --:--:-- --:--:-- --:--:--   451
+   100 44.4M  100 44.4M    0     0  30.0M      0  0:00:01  0:00:01 --:--:-- 82.3M
+   
    ```
 
-2. 修改为可执行命名：
+2. 安装kubectl
 
    ```
-   $ chmod +x ./kubectl
+   $ sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
    ```
-
-3. 移动该命令到相应的路径：
-
-   ```
-   $ sudo mv ./kubectl /usr/local/bin/kubectl
-   ```
-
-4. 测试并确认这是最新版本:
-
-   ```
-   [opc@oke-bastion ~]$ kubectl version --client
-   Client Version: version.Info{Major:"1", Minor:"21", GitVersion:"v1.21.3", GitCommit:"ca643a4d1f7bfe34773c74f79527be4afd95bf39", GitTreeState:"clean", BuildDate:"2021-07-15T21:04:39Z", GoVersion:"go1.16.6", Compiler:"gc", Platform:"linux/amd64"}
-   [opc@oke-bastion ~]$
-   ```
-
-5. 在kubernetes集群页面，点击 **Access Cluster**.
-
-   ![image-20210727120647149](images/image-20210727120647149.png)
 
    
 
-6. 在弹出窗口，选择本地访问
-
-   ![image-20210727120905029](images/image-20210727120905029.png)
-
-7. 回到虚拟机终端界面，按顺序执行上面3条命令：
+3. 测试并确认这是最新版本:
 
    ```
-   [opc@oke-bastion ~]$ mkdir -p $HOME/.kube
-   [opc@oke-bastion ~]$ oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.oc1.ap-seoul-1.aaaaaaaauycbugsbln3y6e5tyk3vvym5qjvdx4bm3gnar5gfmcc5fljdfxra --file $HOME/.kube/config --region ap-seoul-1 --token-version 2.0.0  --kube-endpoint PUBLIC_ENDPOINT
+   $ kubectl version --client
+   Client Version: version.Info{Major:"1", Minor:"23", GitVersion:"v1.23.1", GitCommit:"86ec240af8cbd1b60bcc4c03c20da9b98005b92e", GitTreeState:"clean", BuildDate:"2021-12-16T11:41:01Z", GoVersion:"go1.17.5", Compiler:"gc", Platform:"linux/amd64"}
+   ```
+
+   
+
+6. 回到在Task 1中查询到的本地访问权限的设置步骤。
+
+   ![image-20211223153041393](images/image-20211223153041393.png)
+
+7. 在虚拟机终端界面，按顺序执行上面3步命令，其中第2步选择通过公共端点访问集群的命令。
+
+   ```
+   $ mkdir -p $HOME/.kube
+   $ oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.oc1.ap-seoul-1.aaaaaaaas2dwul6nluthygmat7kafvsbnb63igeong5k2xixrcz6mafovmba --file $HOME/.kube/config --region ap-seoul-1 --token-version 2.0.0  --kube-endpoint PUBLIC_ENDPOINT
    New config written to the Kubeconfig file /home/opc/.kube/config
-   [opc@oke-bastion ~]$ export KUBECONFIG=$HOME/.kube/config
-   [opc@oke-bastion ~]$
+   $ export KUBECONFIG=$HOME/.kube/config
    ```
-
    
-
+   
+   
 9. 这样kubectl安装配置完毕，你可以用命令访问kubernetes集群.
 
    ```
-   [opc@oke-bastion ~]$ kubectl get nodes
-   NAME          STATUS   ROLES   AGE   VERSION
-   10.0.10.13    Ready    node    33m   v1.20.8
-   10.0.10.131   Ready    node    35m   v1.20.8
-   10.0.10.40    Ready    node    35m   v1.20.8
-   [opc@oke-bastion ~]$ 
+   $ kubectl get nodes
+   NAME          STATUS   ROLES   AGE     VERSION
+   10.0.10.185   Ready    node    3h17m   v1.21.5
+   10.0.10.21    Ready    node    3h18m   v1.21.5
+   10.0.10.23    Ready    node    3h17m   v1.21.5
    ```
 
-
+你的kubernetes集群可以正常访问。
 
    
