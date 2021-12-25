@@ -5,18 +5,18 @@ app = Flask(__name__)
 
 # list of cat images
 images = [
-   "https://github.com/minqiaowang/oci-k8s-cn/raw/main/docker-container-fundation/cats/cat01.jpeg",
-   "https://github.com/minqiaowang/oci-k8s-cn/raw/main/docker-container-fundation/cats/cat02.jpeg",
-   "https://github.com/minqiaowang/oci-k8s-cn/raw/main/docker-container-fundation/cats/cat03.jpeg",
-   "https://github.com/minqiaowang/oci-k8s-cn/raw/main/docker-container-fundation/cats/cat04.jpeg",
-   "https://github.com/minqiaowang/oci-k8s-cn/raw/main/docker-container-fundation/cats/cat05.jpeg",
-   "https://github.com/minqiaowang/oci-k8s-cn/raw/main/docker-container-fundation/cats/cat06.jpeg",
-   "https://github.com/minqiaowang/oci-k8s-cn/raw/main/docker-container-fundation/cats/cat07.jpeg",
-   "https://github.com/minqiaowang/oci-k8s-cn/raw/main/docker-container-fundation/cats/cat08.jpeg",
-   "https://github.com/minqiaowang/oci-k8s-cn/raw/main/docker-container-fundation/cats/cat09.jpeg",
-   "https://github.com/minqiaowang/oci-k8s-cn/raw/main/docker-container-fundation/cats/cat10.jpeg",
-   "https://github.com/minqiaowang/oci-k8s-cn/raw/main/docker-container-fundation/cats/cat11.jpeg",
-   "https://github.com/minqiaowang/oci-k8s-cn/raw/main/docker-container-fundation/cats/cat12.jpeg"
+   "https://objectstorage.ap-seoul-1.oraclecloud.com/p/f5rCUdIFKjvK3MkxaOD9bHjMAs9NQbta1GhDkk30pZ0U7YVqZSYHwNIXuGQoarep/n/oraclepartnersas/b/ADWLab/o/cat01.jpeg",
+   "https://objectstorage.ap-seoul-1.oraclecloud.com/p/f5rCUdIFKjvK3MkxaOD9bHjMAs9NQbta1GhDkk30pZ0U7YVqZSYHwNIXuGQoarep/n/oraclepartnersas/b/ADWLab/o/cat02.jpeg",
+   "https://objectstorage.ap-seoul-1.oraclecloud.com/p/f5rCUdIFKjvK3MkxaOD9bHjMAs9NQbta1GhDkk30pZ0U7YVqZSYHwNIXuGQoarep/n/oraclepartnersas/b/ADWLab/o/cat03.jpeg",
+   "https://objectstorage.ap-seoul-1.oraclecloud.com/p/f5rCUdIFKjvK3MkxaOD9bHjMAs9NQbta1GhDkk30pZ0U7YVqZSYHwNIXuGQoarep/n/oraclepartnersas/b/ADWLab/o/cat04.jpeg",
+   "https://objectstorage.ap-seoul-1.oraclecloud.com/p/f5rCUdIFKjvK3MkxaOD9bHjMAs9NQbta1GhDkk30pZ0U7YVqZSYHwNIXuGQoarep/n/oraclepartnersas/b/ADWLab/o/cat05.jpeg",
+   "https://objectstorage.ap-seoul-1.oraclecloud.com/p/f5rCUdIFKjvK3MkxaOD9bHjMAs9NQbta1GhDkk30pZ0U7YVqZSYHwNIXuGQoarep/n/oraclepartnersas/b/ADWLab/o/cat06.jpeg",
+   "https://objectstorage.ap-seoul-1.oraclecloud.com/p/f5rCUdIFKjvK3MkxaOD9bHjMAs9NQbta1GhDkk30pZ0U7YVqZSYHwNIXuGQoarep/n/oraclepartnersas/b/ADWLab/o/cat07.jpeg",
+   "https://objectstorage.ap-seoul-1.oraclecloud.com/p/f5rCUdIFKjvK3MkxaOD9bHjMAs9NQbta1GhDkk30pZ0U7YVqZSYHwNIXuGQoarep/n/oraclepartnersas/b/ADWLab/o/cat08.jpeg",
+   "https://objectstorage.ap-seoul-1.oraclecloud.com/p/f5rCUdIFKjvK3MkxaOD9bHjMAs9NQbta1GhDkk30pZ0U7YVqZSYHwNIXuGQoarep/n/oraclepartnersas/b/ADWLab/o/cat09.jpeg",
+   "https://objectstorage.ap-seoul-1.oraclecloud.com/p/f5rCUdIFKjvK3MkxaOD9bHjMAs9NQbta1GhDkk30pZ0U7YVqZSYHwNIXuGQoarep/n/oraclepartnersas/b/ADWLab/o/cat10.jpeg",
+   "https://objectstorage.ap-seoul-1.oraclecloud.com/p/f5rCUdIFKjvK3MkxaOD9bHjMAs9NQbta1GhDkk30pZ0U7YVqZSYHwNIXuGQoarep/n/oraclepartnersas/b/ADWLab/o/cat11.jpeg",
+   "https://objectstorage.ap-seoul-1.oraclecloud.com/p/f5rCUdIFKjvK3MkxaOD9bHjMAs9NQbta1GhDkk30pZ0U7YVqZSYHwNIXuGQoarep/n/oraclepartnersas/b/ADWLab/o/cat12.jpeg"
     ]
 
 @app.route('/')
