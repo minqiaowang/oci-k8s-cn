@@ -15,8 +15,8 @@
 1. 在虚机终端上，编辑一个文件 `myfirstapp_lb.yaml`。将下面的内容拷贝到文件中。
 
    - `kind: Deployment`: 为应用程序定义了一个部署
-   - `replicas: 3`: 运行3个pods
-   - `image: <your_name>/myfirstapp:1.0`: 要运行的容器镜像，请使用你在docker hub中注册的用户名，如果本地镜像不存在，则从远程资料库中获取。 
+   - `replicas: 3`: 运行3个容器。
+   - `image: <your_name>/myfirstapp:1.0`: 要运行的容器镜像，在之前的实验中创建的镜像。请使用你在docker hub中注册的用户名，如果本地镜像不存在，则从远程资料库中获取。 
    - `type: LoadBalancer`: 定义了一个类型为LoadBalancer的服务, 用于负载均衡到后端的应用程序。
 
    ```
@@ -64,50 +64,213 @@
 3. 要在kubernetes集群中创建`myfirstapp_lb.yaml`文件中定义的部署和服务，运行下面的命令：
 
    ```
-   [opc@oke-bastion ~]$ kubectl apply -f myfirstapp_lb.yaml
-   deployment.apps/my-nginx created
-   service/my-nginx-svc created
-   [opc@oke-bastion ~]$ 
+   $ kubectl apply -f myfirstapp_lb.yaml
+   deployment.apps/myapp created
+   service/myapp-svc created
    ```
-
-3. 负载均衡器从挂起状态到完全运行可能需要几分钟的时间。您可以通过输入`kubectl get pod,svc`查看集群pod和服务的运行状态，其中的输出类似于以下内容：
+   
+3. 负载均衡器从挂起状态到完全运行可能需要几分钟的时间。您可以通过输入`kubectl get pod,svc`查看集群中pod和服务的运行状态。pod是kubernetes集群中部署管理的最小单元，每个pod中可以包含一个容器，如本例；也可以包含多个容器，pod中的容器之间共享存储和网络资源。
 
    ```
-   $ kubectl get pod,svc
-   NAME                            READY   STATUS    RESTARTS   AGE
-   pod/my-nginx-5d59d67564-2tjbv   1/1     Running   0          95s
-   pod/my-nginx-5d59d67564-mkldp   1/1     Running   0          95s
-   pod/my-nginx-5d59d67564-z9btr   1/1     Running   0          95s
+   kubectl get pod,svc
+   NAME                        READY   STATUS    RESTARTS   AGE
+   pod/myapp-8444c9559-c8lp6   1/1     Running   0          2m1s
+   pod/myapp-8444c9559-hrg67   1/1     Running   0          2m1s
+   pod/myapp-8444c9559-tzz9w   1/1     Running   0          2m1s
    
-   NAME                   TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)        AGE
-   service/kubernetes     ClusterIP      10.96.0.1       <none>          443/TCP        67m
-   service/my-nginx-svc   LoadBalancer   10.96.165.165   146.56.187.83   80:32352/TCP   96s
-   
-   NAME                       READY   UP-TO-DATE   AVAILABLE   AGE
-   deployment.apps/my-nginx   3/3     3            3           96s
-   
-   NAME                                  DESIRED   CURRENT   READY   AGE
-   replicaset.apps/my-nginx-5d59d67564   3         3         3       96s
+   NAME                 TYPE           CLUSTER-IP      EXTERNAL-IP       PORT(S)        AGE
+   service/kubernetes   ClusterIP      10.96.0.1       <none>            443/TCP        43h
+   service/myapp-svc    LoadBalancer   10.96.239.233   129.154.211.158   80:30573/TCP   2m1s
    
    ```
 
-   - 输出显示`myapp`应用正在3个pod（pod/myapp）上运行，负载均衡器正在运行（service/myapp-svc），并且有一个外部IP（146.56.187.83），客户端可以使用该IP连接到部署在pod上的应用程序。
+   - 输出显示`myapp`应用正在3个pod（`pod/myapp-*`）上运行，负载均衡器正在运行（`service/myapp-svc`），并且有一个外部IP（如：129.154.211.158），客户端可以使用该IP连接到部署在集群里的应用程序。
 
 6. 打开浏览器, 输入 url `http://<your_lb_publicIP>`, 你可以看到应用运行正常。
 
-   ![image-20211224151052651](images/image-20211224151052651.png)
+   ![image-20211225095640632](images/image-20211225095640632.png)
 
-7. 如果是在公司内网或其他有限制的网络环境下，会出现下列错误信息，不允许http访问。可以采用其他网络进行访问。![image-20210714153724741](images/image-20210714153724741.png)
+7. 如果是在公司内网或其他有限制的网络环境下，会出现下列错误信息，不允许http访问。可以改用其他网络进行访问。![image-20210714153724741](images/image-20210714153724741.png)
 
    
 
-8. 用以下命令来删除部署的应用和负载均衡服务。
+6. 
+
+## Task 2：查看部署的应用信息
+
+1. 查看pod信息。
 
    ```
-   $ kubectl delete -f myfirstapp_lb.yaml 
+   $ kubectl get pod
+   NAME                    READY   STATUS    RESTARTS   AGE
+   myapp-8444c9559-228jj   1/1     Running   0          6m4s
+   myapp-8444c9559-b4r8h   1/1     Running   0          6m4s
+   myapp-8444c9559-kvc7l   1/1     Running   0          6m5s
+   ```
+
+   
+
+2. 连接进入其中一个pod。请用你自己的pod名。
+
+   ```
+   $ kubectl exec -it myapp-8444c9559-228jj -- sh
+   / #
+   ```
+
+   
+
+3. 可以试着运行容器内的命令，查看运行情况。
+
+   ```
+   / # ps -ef
+   PID   USER     TIME   COMMAND
+       1 root       0:00 python /usr/src/app/app.py
+       6 root       0:00 sh
+      12 root       0:00 ps -ef
+   ```
+
+   
+
+4. 退出容器。
+
+   ```
+   / # exit
+   $
+   ```
+
+   
+
+5. 查看pod运行日志。请用你自己的pod名。
+
+   ```
+   $ kubectl logs -f myapp-8444c9559-228jj
+    * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+   10.244.0.0 - - [25/Dec/2021 01:52:42] "GET /favicon.ico HTTP/1.1" 404 -
+   10.244.1.0 - - [25/Dec/2021 01:52:50] "GET / HTTP/1.1" 200 -
+   10.244.0.0 - - [25/Dec/2021 01:54:13] "GET / HTTP/1.1" 200 -
+   
+   ```
+
+   
+
+6. `CTRL+C`退出。
+
+7. 在OCI主页面，点击**主菜单**->**网络**->**负载平衡器**，可以观察到系统自动创建了一个负载平衡器。
+
+   ![image-20211225101334768](images/image-20211225101334768.png)
+
+8. 点击进入负载平衡器，查看当前状态和配置，如，监听，后端集信息等。
+
+   ![image-20211225101505773](images/image-20211225101505773.png)
+
+9. 也可以进入虚拟云网络，查看自动配置的安全列表入站出站规则等。
+
+   ![image-20211225101730453](images/image-20211225101730453.png)
+
+10. 在虚机字符终端，用以下命令来删除部署的应用和负载均衡服务。
+
+   ```
+   $ kubectl delete -f myfirstapp_lb.yaml
    deployment.apps "myapp" deleted
    service "myapp-svc" deleted
-   $
+   ```
+
+   
+
+11. 在OCI控制台页面，可以查看到负载平衡器以及对应的安全规则都清除掉了。
+
+    
+
+## Task 3：使用OCI容器注册表里的镜像来部署应用。
+
+1. 要使用OCI容器注册表里的镜像来部署kubernetes应用，我们需要先创建一个secret。命令格式如下：
+
+   ```
+   kubectl create secret docker-registry <secret-name> --docker-server=<region-key>.ocir.io --docker-username='<tenancy-namespace>/<oci-username>' --docker-password='<oci-auth-token>' --docker-email='<email-address>'
+   ```
+
+   - `<secret-name>`：该secret的命名，如：ocirsecret。
+   - `<region-key>`：区域key，如：Seoul是icn，Chuncheon是yny。
+   - `<tenancy-namespace>`：对象存储的命名空间，在租户信息页面里可以查询到，如：oraclepartersas。
+   - `<oci-username>`：登录OCI的用户名，如：apac-student1。
+   - `<oci-auth-token>`：之前创建的令牌，如果使用共享用户apac-student1，则令牌为：`om[v]WJ89-m8oCYE}qgQ`。
+   - `<email-address>`：必须输入，但可以输入任何邮件地址。
+
+2. 执行下面的命令创建一个secret，使用自己的相应信息。
+
+   ```
+   $ <copy>kubectl create secret docker-registry ocirsecret --docker-server=icn.ocir.io --docker-username='oraclepartnersas/apac-student1' --docker-password='om[v]WJ89-m8oCYE}qgQ' --docker-email='email@null.com'</copy>
+   secret/ocirsecret created
+   ```
+
+   
+
+3. 编辑一个部署文件：`myocirapp_lb.yaml`，拷贝下列内容到文件中，注意：
+
+   - image：使用你自己的镜像标签。
+   - imagePullSecrets：使用前面创建的secret名称。
+
+   ```
+   kind: Deployment
+   metadata:
+     name: myapp
+     labels:
+       app: myapp
+   spec:
+     replicas: 3
+     selector:
+       matchLabels:
+         app: myapp
+     template:
+       metadata:
+         labels:
+           app: myapp
+       spec:
+         containers:
+         - name: myapp
+           image: icn.ocir.io/oraclepartnersas/student01:myfirstapp-v1.0
+           ports:
+           - containerPort: 5000
+             protocol: TCP
+         imagePullSecrets:
+         - name: ocirsecret
+   ---
+   apiVersion: v1
+   kind: Service
+   metadata:
+     name: myapp-svc
+     labels:
+       app: myapp
+   spec:
+     type: LoadBalancer
+     ports:
+     - port: 80
+       protocol: TCP
+       targetPort: 5000
+     selector:
+       app: myapp
+   ```
+
+   
+
+4. 部署应用。
+
+   ```
+   $ kubectl apply -f myocirapp_lb.yaml
+   deployment.apps/myapp created
+   service/myapp-svc created
+   ```
+
+   
+
+5. 可以按照Task 1步骤，查看应用信息。
+
+6. 删除应用。
+
+   ```
+   $ kubectl delete -f myocirapp_lb.yaml
+   deployment.apps "myapp" deleted
+   service "myapp-svc" deleted
    ```
 
    

@@ -46,7 +46,7 @@
 
 ## Task 2：运行你的第一个容器
 
-1. 从远程资料库（缺省从[docker hub](hub.docker.com)中拉取一个容器镜像到本地。例如，我们可以拉取一个nginx容器镜像。
+1. 从远程资料库（缺省从[docker hub](hub.docker.com)中获取一个容器镜像到本地。例如，我们可以获取一个nginx容器镜像。
 
     ```
     $ <copy>docker pull nginx</copy>
@@ -76,7 +76,7 @@
 
     
 
-3. 基于镜像启动容器。如果本地镜像不存在，docker会自动去远程资料库拉取镜像文件。
+3. 基于镜像启动容器。如果本地镜像不存在，docker会自动去远程资料库获取镜像文件。
 
     - `-d`: 容器在后台运行
     - `-p`: 设置主机端口与容器端口映射
@@ -219,7 +219,7 @@
 
 要创建自己的容器镜像，你可以从头开始创建容器镜像，也可以使用一个现有的镜像，在里面安装自己的应用。下面我们会从一个现有镜像Alpine开始。Alpine是一个轻量级的Linux发行版，包含linux的核心组件。我们已经写好了一个python应用，该程序在每次调用时会随机加载一些图片。
 
-1. 下载python应用程序。
+1. 下载示例python应用程序。
 
     ```
     $ <copy>wget https://github.com/minqiaowang/oci-k8s-cn/raw/main/docker-container-fundation/flask-app.zip</copy>
@@ -453,12 +453,11 @@
     Configure a credential helper to remove this warning. See
     https://docs.docker.com/engine/reference/commandline/login/#credentials-store
     
-    Login Succeeded
-    [opc@docker-test ~]$ 
+    Login Succeeded 
     ```
-
     
-
+    
+    
 2. 查看现在的本地镜像，记住对应的IMAGE ID。
 
     ```
@@ -471,7 +470,7 @@
 
     
 
-3. 给该镜像文件打标签，使用你自己的image id，标签格式为`<your_username>/myfirstapp:1.0`。
+3. 给该镜像文件打标签，使用你自己的image id。标签格式为`<your_username>/myfirstapp:1.0`，使用你再docker hub中注册的用户名。
 
     ```
     $ docker tag 806493459c66 minqiao/myfirstapp:1.0
