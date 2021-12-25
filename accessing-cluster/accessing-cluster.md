@@ -23,14 +23,14 @@ Kubernetes集群创建完成后，你可以通过Cloud Shell或本地机器访�
 
     ![image-20211223153041393](images/image-20211223153041393.png)
 
-4. sdaf
+    
 
 ## Task 2：安装和配置OCI CLI
 
 1. 连接到虚拟主机，运行下面的命令来安装OCI CLI
 
 ```
-$ sudo yum install -y python36-oci-cli
+$ <copy>sudo yum install -y python36-oci-cli</copy>
 ```
 
 
@@ -46,7 +46,7 @@ $ sudo yum install -y python36-oci-cli
    - 接受缺省的key名
 
    ```
-   $ oci setup config
+   $ <copy>oci setup config</copy>
        This command provides a walkthrough of creating a valid CLI config file.
    
        The following links explain where to find the information required by this
@@ -98,7 +98,7 @@ $ sudo yum install -y python36-oci-cli
 3. 查看公钥内容，拷贝到下一步使用。
 
    ```
-   $ cat .oci/oci_api_key_public.pem 
+   $ <copy>cat .oci/oci_api_key_public.pem</copy> 
    -----BEGIN PUBLIC KEY-----
    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAppdx2rsxvCGCLbu9Z2xP
    txGfP7xkJ68PrrrOh9nPKfSy2uhS2ePR/x9FL58GL9TElwofyel7DbVlPZzSn4UL
@@ -170,7 +170,7 @@ $ sudo yum install -y python36-oci-cli
 1. 下载kubectl最新版本:
 
    ```
-   $ curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+   $ <copy>curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"</copy>
      % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                     Dload  Upload   Total   Spent    Left  Speed
    100   154  100   154    0     0    450      0 --:--:-- --:--:-- --:--:--   451
@@ -181,15 +181,15 @@ $ sudo yum install -y python36-oci-cli
 2. 安装kubectl
 
    ```
-   $ sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+   $ <copy>sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl</copy>
    ```
 
    
 
-3. 测试并确认这是最新版本:
+3. 测试并确认kubectl版本:
 
    ```
-   $ kubectl version --client
+   $ <copy>kubectl version --client</copy>
    Client Version: version.Info{Major:"1", Minor:"23", GitVersion:"v1.23.1", GitCommit:"86ec240af8cbd1b60bcc4c03c20da9b98005b92e", GitTreeState:"clean", BuildDate:"2021-12-16T11:41:01Z", GoVersion:"go1.17.5", Compiler:"gc", Platform:"linux/amd64"}
    ```
 
@@ -213,7 +213,7 @@ $ sudo yum install -y python36-oci-cli
 9. 这样kubectl安装配置完毕，你可以用命令访问kubernetes集群.
 
    ```
-   $ kubectl get nodes
+   $ <copy>kubectl get nodes</copy>
    NAME          STATUS   ROLES   AGE     VERSION
    10.0.10.185   Ready    node    3h17m   v1.21.5
    10.0.10.21    Ready    node    3h18m   v1.21.5

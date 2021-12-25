@@ -473,7 +473,7 @@
 3. 给该镜像文件打标签，使用你自己的image id。标签格式为`<your_username>/myfirstapp:1.0`，使用你再docker hub中注册的用户名。
 
     ```
-    $ docker tag 806493459c66 minqiao/myfirstapp:1.0
+    $ <copy>docker tag 806493459c66 minqiao/myfirstapp:1.0</copy>
     ```
 
     
@@ -494,7 +494,7 @@
 5. 将镜像推送到远端资料库。请使用你自己的远端资料库的用户名：`<your_username>/myfirstapp:1.0`。
 
     ```
-    $ docker push minqiao/myfirstapp:1.0
+    $ <copy>docker push minqiao/myfirstapp:1.0</copy>
     The push refers to repository [docker.io/minqiao/myfirstapp]
     1f09448d385f: Pushed 
     8748692e5262: Pushed 
@@ -617,7 +617,7 @@
 
     ![image-20211223102023199](images/image-20211223102023199.png)
 
-20. dsf
+    
 
 ## Task 5：运行新的自定义容器
 
@@ -725,7 +725,7 @@
 7. 删除该容器。
 
     ```
-    $ docker rm myfirstapp
+    $ <copy>docker rm myfirstapp</copy>
     myfirstapp
     ```
 
@@ -734,7 +734,7 @@
 8. 查看本地容器镜像，可以看到镜像已经下载到本地。
 
     ```
-    $ docker image ls
+    $ <copy>docker image ls</copy>
     REPOSITORY                               TAG                 IMAGE ID            CREATED             SIZE
     icn.ocir.io/oraclepartnersas/student01   myfirstapp-v1.0     806493459c66        21 hours ago        56.8MB
     
@@ -742,5 +742,5 @@
 
     
 
-9. sdf
+    
 

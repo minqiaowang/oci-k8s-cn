@@ -64,7 +64,7 @@
 3. 要在kubernetes集群中创建`myfirstapp_lb.yaml`文件中定义的部署和服务，运行下面的命令：
 
    ```
-   $ kubectl apply -f myfirstapp_lb.yaml
+   $ <copy>kubectl apply -f myfirstapp_lb.yaml</copy>
    deployment.apps/myapp created
    service/myapp-svc created
    ```
@@ -72,7 +72,7 @@
 3. 负载均衡器从挂起状态到完全运行可能需要几分钟的时间。您可以通过输入`kubectl get pod,svc`查看集群中pod和服务的运行状态。pod是kubernetes集群中部署管理的最小单元，每个pod中可以包含一个容器，如本例；也可以包含多个容器，pod中的容器之间共享存储和网络资源。
 
    ```
-   kubectl get pod,svc
+   $ <copy>kubectl get pod,svc</copy>
    NAME                        READY   STATUS    RESTARTS   AGE
    pod/myapp-8444c9559-c8lp6   1/1     Running   0          2m1s
    pod/myapp-8444c9559-hrg67   1/1     Running   0          2m1s
@@ -101,7 +101,7 @@
 1. 查看pod信息。
 
    ```
-   $ kubectl get pod
+   $ <copy>kubectl get pod</copy>
    NAME                    READY   STATUS    RESTARTS   AGE
    myapp-8444c9559-228jj   1/1     Running   0          6m4s
    myapp-8444c9559-b4r8h   1/1     Running   0          6m4s
@@ -113,7 +113,7 @@
 2. 连接进入其中一个pod。请用你自己的pod名。
 
    ```
-   $ kubectl exec -it myapp-8444c9559-228jj -- sh
+   $ <copy>kubectl exec -it myapp-8444c9559-228jj -- sh</copy>
    / #
    ```
 
@@ -122,7 +122,7 @@
 3. 可以试着运行容器内的命令，查看运行情况。
 
    ```
-   / # ps -ef
+   / # <copy>ps -ef</copy>
    PID   USER     TIME   COMMAND
        1 root       0:00 python /usr/src/app/app.py
        6 root       0:00 sh
@@ -134,7 +134,7 @@
 4. 退出容器。
 
    ```
-   / # exit
+   / # <copy>exit</copy>
    $
    ```
 
@@ -143,7 +143,7 @@
 5. 查看pod运行日志。请用你自己的pod名。
 
    ```
-   $ kubectl logs -f myapp-8444c9559-228jj
+   $ <copy>kubectl logs -f myapp-8444c9559-228jj</copy>
     * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
    10.244.0.0 - - [25/Dec/2021 01:52:42] "GET /favicon.ico HTTP/1.1" 404 -
    10.244.1.0 - - [25/Dec/2021 01:52:50] "GET / HTTP/1.1" 200 -
@@ -170,7 +170,7 @@
 10. 在虚机字符终端，用以下命令来删除部署的应用和负载均衡服务。
 
    ```
-   $ kubectl delete -f myfirstapp_lb.yaml
+   $ <copy>kubectl delete -f myfirstapp_lb.yaml</copy>
    deployment.apps "myapp" deleted
    service "myapp-svc" deleted
    ```
@@ -211,6 +211,7 @@
    - imagePullSecrets：使用前面创建的secret名称。
 
    ```
+   <copy>
    kind: Deployment
    metadata:
      name: myapp
@@ -249,6 +250,7 @@
        targetPort: 5000
      selector:
        app: myapp
+   </copy>
    ```
 
    
@@ -256,7 +258,7 @@
 4. 部署应用。
 
    ```
-   $ kubectl apply -f myocirapp_lb.yaml
+   $ <copy>kubectl apply -f myocirapp_lb.yaml</copy>
    deployment.apps/myapp created
    service/myapp-svc created
    ```
@@ -268,7 +270,7 @@
 6. 删除应用。
 
    ```
-   $ kubectl delete -f myocirapp_lb.yaml
+   $ <copy>kubectl delete -f myocirapp_lb.yaml</copy>
    deployment.apps "myapp" deleted
    service "myapp-svc" deleted
    ```
