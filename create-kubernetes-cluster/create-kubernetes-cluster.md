@@ -2,7 +2,7 @@
 
 ## 简介
 
-通过本练习，你将学习到如何在OCI上创建 Kubernetes集群。
+通过本练习，你将学习到如何在OCI上创建 Kubernetes集群。OCI中由Kubernetes 集群控制平台来实现 Kubernetes 的核心功能，集群控制平台完全由 Oracle 管理，而且是免费的。OCI仅收取计算和存储的费用。
 
 
 

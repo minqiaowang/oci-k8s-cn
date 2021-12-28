@@ -17,7 +17,7 @@
    - `kind: Deployment`: 为应用程序定义了一个部署
    - `replicas: 3`: 运行3个容器。
    - `image: <your_name>/myfirstapp:1.0`: 要运行的容器镜像，在之前的实验中创建的镜像。请使用你在docker hub中注册的用户名，如果本地镜像不存在，则从远程资料库中获取。 
-   - `type: LoadBalancer`: 定义了一个类型为LoadBalancer的服务, 用于负载均衡到后端的应用程序。
+   - `kind: Service, type: LoadBalancer`: 定义了一个类型为LoadBalancer的服务, 用于负载均衡到后端的应用程序。
 
    ```
    <copy>
@@ -69,7 +69,7 @@
    service/myapp-svc created
    ```
    
-3. 负载均衡器从挂起状态到完全运行可能需要几分钟的时间。您可以通过输入`kubectl get pod,svc`查看集群中pod和服务的运行状态。pod是kubernetes集群中部署管理的最小单元，每个pod中可以包含一个容器，如本例；也可以包含多个容器，pod中的容器之间共享存储和网络资源。
+3. 负载均衡器从挂起状态到完全运行可能需要几分钟的时间。您可以通过输入`kubectl get pod,svc`查看集群中pod和服务的运行状态。pod是kubernetes集群中部署管理的最小单元，每个pod中可以包含一个容器，如本例；也可以包含多个容器，pod中的容器之间共享存储和网络资源。服务是一种抽象，它定义了一组逻辑 pod 和访问它们的策略。
 
    ```
    $ <copy>kubectl get pod,svc</copy>
@@ -214,21 +214,21 @@
    <copy>
    kind: Deployment
    metadata:
-     name: myapp
+     name: myapp2
      labels:
-       app: myapp
+       app: myapp2
    spec:
      replicas: 3
      selector:
        matchLabels:
-         app: myapp
+         app: myapp2
      template:
        metadata:
          labels:
-           app: myapp
+           app: myapp2
        spec:
          containers:
-         - name: myapp
+         - name: myapp2
            image: icn.ocir.io/oraclepartnersas/student01:myfirstapp-v1.0
            ports:
            - containerPort: 5000
@@ -239,9 +239,9 @@
    apiVersion: v1
    kind: Service
    metadata:
-     name: myapp-svc
+     name: myapp2-svc
      labels:
-       app: myapp
+       app: myapp2
    spec:
      type: LoadBalancer
      ports:
@@ -249,7 +249,7 @@
        protocol: TCP
        targetPort: 5000
      selector:
-       app: myapp
+       app: myapp2
    </copy>
    ```
 

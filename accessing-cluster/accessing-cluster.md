@@ -167,6 +167,8 @@ $ <copy>sudo yum install -y python36-oci-cli</copy>
 
 ## Task 3：安装配置kubectl
 
+kuberctl是kubernetes集群管理的命令行工具。
+
 1. 下载kubectl最新版本:
 
    ```
