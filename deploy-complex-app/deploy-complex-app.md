@@ -303,10 +303,29 @@ Helm 是一个用于 Kubernetes 应用的包管理工具，主要用来管理Hel
 
 ## Task 4: 在kubernetes集群中部署MySQL
 
-1. 编辑文件mysql-statusfull.yaml。复制以下内容到该文件，保存文件。
+1. 获取事先写好的MySQL配置文件：mysql-statusfull.yaml。
 
     ```
-    <copy>
+    $ <copy>wget https://raw.githubusercontent.com/minqiaowang/oci-k8s-cn/main/deploy-complex-app/mysql-statusfull.yaml</copy>
+    --2022-01-07 07:18:02--  https://raw.githubusercontent.com/minqiaowang/oci-k8s-cn/main/deploy-complex-app/mysql-statusfull.yaml
+    Resolving raw.githubusercontent.com (raw.githubusercontent.com)... 185.199.111.133, 185.199.108.133, 185.199.109.133, ...
+    Connecting to raw.githubusercontent.com (raw.githubusercontent.com)|185.199.111.133|:443... connected.
+    HTTP request sent, awaiting response... 200 OK
+    Length: 1639 (1.6K) [text/plain]
+    Saving to: 'mysql-statusfull.yaml'
+    
+    100%[===================================================================>] 1,639       --.-K/s   in 0s      
+    
+    2022-01-07 07:18:02 (20.6 MB/s) - 'mysql-statusfull.yaml' saved [1639/1639]
+    
+    ```
+
+    
+
+2. 查看该文件内容，该文件定义部署一个单节点的MySQL到kubernetes集群中，命名空间也是redis。
+
+    ```
+    $ <copy>cat mysql-statusfull.yaml</copy> 
     ---
     apiVersion: v1
     kind: ConfigMap
@@ -317,6 +336,7 @@ Helm 是一个用于 Kubernetes 应用的包管理工具，主要用来管理Hel
       namespace: redis
     data:
       master.cnf: |
+        # Apply this config only on the master.
         [mysqld]
         log-bin
     
@@ -386,7 +406,7 @@ Helm 是一个用于 Kubernetes 应用的包管理工具，主要用来管理Hel
     metadata:
       name: mysql
       labels:
-    app: mysql
+        app: mysql
       namespace: redis
     spec:
       ports:
@@ -395,23 +415,31 @@ Helm 是一个用于 Kubernetes 应用的包管理工具，主要用来管理Hel
       clusterIP: None
       selector:
         app: mysql
-    </copy>
     ```
 
     
 
-2. sdaf
+3. 运行下列命令来部署MySQL。
 
-3. sdaf
+    ```
+    $ kubectl apply -f mysql-statusfull.yaml
+    configmap/mysql created
+    statefulset.apps/mysql created
+    service/mysql created
+    ```
 
-4. sadf
+    
 
-5. asdf
+4. sdaf
 
-6. sadf
+5. sadf
 
-7. sdaf
+6. asdf
 
-8. sdf
+7. sadf
 
-9. 
+8. sdaf
+
+9. sdf
+
+10. 
