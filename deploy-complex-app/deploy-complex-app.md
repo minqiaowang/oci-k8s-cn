@@ -422,7 +422,7 @@ Helm 是一个用于 Kubernetes 应用的包管理工具，主要用来管理Hel
 3. 运行下列命令来部署MySQL。
 
     ```
-    $ kubectl apply -f mysql-statusfull.yaml
+    $ <copy>kubectl apply -f mysql-statusfull.yaml</copy>
     configmap/mysql created
     statefulset.apps/mysql created
     service/mysql created
@@ -430,16 +430,193 @@ Helm 是一个用于 Kubernetes 应用的包管理工具，主要用来管理Hel
 
     
 
+4. 检查MySQL状态。
+
+    ```
+    $ <copy>kubectl -n redis get pod,svc</copy>
+    NAME                   READY   STATUS    RESTARTS   AGE
+    pod/mysql-0            1/1     Running   0          2m54s
+    pod/redis-master-0     1/1     Running   0          3h20m
+    pod/redis-replicas-0   1/1     Running   0          3h20m
+    pod/redis-replicas-1   1/1     Running   0          3h18m
+    pod/redis-replicas-2   1/1     Running   0          3h17m
+    
+    NAME                     TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+    service/mysql            ClusterIP   None            <none>        3306/TCP   2m54s
+    service/redis-headless   ClusterIP   None            <none>        6379/TCP   3h20m
+    service/redis-master     ClusterIP   10.96.200.226   <none>        6379/TCP   3h20m
+    service/redis-replicas   ClusterIP   10.96.125.190   <none>        6379/TCP   3h20m
+    ```
+
+    
+
+5. 下载事先写好的SQL脚本文件。该脚本用来创建MySQL的demo表。
+
+    ```
+    $ wget https://raw.githubusercontent.com/minqiaowang/oci-k8s-cn/main/deploy-complex-app/microdb.sql
+    --2022-01-07 07:32:32--  https://raw.githubusercontent.com/minqiaowang/oci-k8s-cn/main/deploy-complex-app/microdb.sql
+    Resolving raw.githubusercontent.com (raw.githubusercontent.com)... 185.199.108.133, 185.199.109.133, 185.199.110.133, ...
+    Connecting to raw.githubusercontent.com (raw.githubusercontent.com)|185.199.108.133|:443... connected.
+    HTTP request sent, awaiting response... 200 OK
+    Length: 5060 (4.9K) [text/plain]
+    Saving to: 'microdb.sql'
+    
+    100%[===================================================================>] 5,060       --.-K/s   in 0s      
+    
+    2022-01-07 07:32:33 (37.4 MB/s) - 'microdb.sql' saved [5060/5060]
+    ```
+
+    
+
+6. 将SQL脚本文件拷贝到MySQL所在的pod中。
+
+    ```
+    $ <copy>kubectl -n redis cp ./microdb.sql mysql-0:/microdb.sql</copy>
+    ```
+
+    
+
+7. 连接到MySQL所在的pod。
+
+    ```
+    [opc@docker-test ~]$ <copy>kubectl -n redis exec -it mysql-0 -- bash</copy>
+    root@mysql-0:/# 
+    ```
+
+    
+
+8. 连接到MySQL数据库。
+
+    ```
+    root@mysql-0:/# <copy>mysql -uroot -p'Ora@2021.passwd'</copy>
+    mysql: [Warning] Using a password on the command line interface can be insecure.
+    Welcome to the MySQL monitor.  Commands end with ; or \g.
+    Your MySQL connection id is 9
+    Server version: 8.0.27 MySQL Community Server - GPL
+    
+    Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+    
+    Oracle is a registered trademark of Oracle Corporation and/or its
+    affiliates. Other names may be trademarks of their respective
+    owners.
+    
+    Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+    
+    mysql> 
+    ```
+
+    
+
+9. 创建Demo数据库和demo用户并授于相应的权限。
+
+    ```
+    mysql> <copy>create database microdb;</copy>
+    Query OK, 1 row affected (0.01 sec)
+    
+    mysql> <copy>CREATE USER 'micro'@'%' IDENTIFIED BY 'Ora@2021.passwd';</copy>
+    Query OK, 0 rows affected (0.01 sec)
+    
+    mysql> <copy>alter user 'micro'@'%' identified with mysql_native_password by 'Ora@2021.passwd';</copy>
+    Query OK, 0 rows affected (0.00 sec)
+    
+    mysql> <copy>GRANT ALL PRIVILEGES ON microdb.* TO 'micro'@'%' ;</copy>
+    Query OK, 0 rows affected (0.01 sec)
+    
+    mysql> <copy>FLUSH PRIVILEGES;</copy>
+    Query OK, 0 rows affected (0.00 sec)
+    
+    mysql> 
+    ```
+
+    
+
+10. 进入demo数据库，执行建表脚本。
+
+    ```
+    mysql> <copy>use microdb;</copy>
+    Database changed
+    mysql> <copy>source microdb.sql;</copy>
+    Query OK, 0 rows affected (0.00 sec)
+    
+    Query OK, 0 rows affected (0.00 sec)
+    
+    Query OK, 0 rows affected (0.00 sec)
+    
+    Query OK, 0 rows affected (0.00 sec)
+    
+    Query OK, 0 rows affected (0.00 sec)
+    
+    Query OK, 0 rows affected (0.01 sec)
+    
+    Query OK, 1 row affected, 1 warning (0.00 sec)
+    
+    Database changed
+    Query OK, 0 rows affected (0.01 sec)
+    
+    Query OK, 0 rows affected (0.00 sec)
+    
+    Query OK, 0 rows affected (0.00 sec)
+    
+    Query OK, 0 rows affected (0.03 sec)
+    
+    ...
+    ...
+    
+    Query OK, 0 rows affected (0.00 sec)
+    
+    Query OK, 0 rows affected (0.00 sec)
+    
+    Query OK, 0 rows affected (0.00 sec)
+    
+    mysql> 
+    ```
+
+    
+
+11. 查看创建的demo表。
+
+    ```
+    mysql> <copy>show tables;</copy>
+    +-------------------+
+    | Tables_in_microdb |
+    +-------------------+
+    | article           |
+    | users             |
+    +-------------------+
+    2 rows in set (0.00 sec)
+    
+    mysql> 
+    ```
+
+    
+
+12. 退出MySQL，并退出pod连接。
+
+    ```
+    mysql> <copy>exit</copy>
+    Bye
+    root@mysql-0:/# <copy>exit</copy>
+    exit
+    $
+    ```
+
+    
+
+13. dsaf
+
+
+
+## Task 5: 在OKE中部署微服务应用
+
+sdaf
+
+1. sdafsdaf
+2. dsfa
+3. sdf
 4. sdaf
-
-5. sadf
-
-6. asdf
-
-7. sadf
-
-8. sdaf
-
-9. sdf
-
+5. sdf
+6. sdaf
+7. sdaf
+8. sdf
+9. sdaf
 10. 

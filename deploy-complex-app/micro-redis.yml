@@ -22,7 +22,7 @@ spec:
           containerPort: 8000
           protocol: TCP
       imagePullSecrets:
-        - name: ocirsecret
+        - name: ocirsecret-sh
 ---
 apiVersion: v1
 kind: Service
