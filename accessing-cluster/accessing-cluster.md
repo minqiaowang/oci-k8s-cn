@@ -205,14 +205,27 @@ kuberctl是kubernetes集群管理的命令行工具。
 
    ```
    $ mkdir -p $HOME/.kube
-   $ oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.oc1.ap-seoul-1.aaaaaaaas2dwul6nluthygmat7kafvsbnb63igeong5k2xixrcz6mafovmba --file $HOME/.kube/config --region ap-seoul-1 --token-version 2.0.0  --kube-endpoint PUBLIC_ENDPOINT
+   $ oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.oc1.ap-seoul-1.aaaaaaaas2dwul...gmat7k...z6mafovmba --file $HOME/.kube/config --region ap-seoul-1 --token-version 2.0.0  --kube-endpoint PUBLIC_ENDPOINT
    New config written to the Kubeconfig file /home/opc/.kube/config
    $ export KUBECONFIG=$HOME/.kube/config
    ```
    
    
    
-9. 这样kubectl安装配置完毕，你可以用命令访问kubernetes集群.
+9. 这样kubectl安装配置完毕，你可以用命令访问kubernetes集群。先检查集群健康状态。
+
+   ```
+   $ kubectl get cs  
+   Warning: v1 ComponentStatus is deprecated in v1.19+
+   NAME                 STATUS    MESSAGE             ERROR
+   controller-manager   Healthy   ok                  
+   scheduler            Healthy   ok                  
+   etcd-0               Healthy   {"health":"true"} 
+   ```
+   
+   
+   
+9. 先检查集群节点状态。
 
    ```
    $ <copy>kubectl get nodes</copy>
