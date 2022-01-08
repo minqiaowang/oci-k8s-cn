@@ -12,7 +12,7 @@
 
 ### 先决条件
 
-- 在OCI上创建一个VM，操作系统为Oracle Linux 7.9，机型选用缺省设置。
+- 在OCI上创建一个VM，操作系统为缺省的Oracle Linux 7.9。（**注意：**因为资源有限，机型请选用最小缺省设置，并且选用缺省共享的VCN，请不要另外创建VCN。）
 - 在[docker hub](https://hub.docker.com)上注册一个账号，用来存储容器镜像。
 
 
@@ -185,7 +185,7 @@
 
     
 
-11. 另外，我们需要修改虚机所在的VCN公共子网的的安全规则，添加入站规则，允许访问80端口。
+11. 另外，我们需要修改虚机所在的VCN公共子网的的安全规则，添加入站规则，允许访问80端口。（**注意：**如果使用的是共享的VCN，该入站规则已经设置）
 
     ![image-20211222111541050](images/image-20211222111541050.png)
 
@@ -294,7 +294,7 @@
 
     Dockerfile是用来构建容器镜像的描述文件，在该文件中我们可以看到镜像文件的生成过程。
 
-    - 从基础镜像alpine，版本3.5开始，如果本地没有该镜像，则从远端资料库中拉取过来。
+    - 从基础镜像alpine:3.5开始，如果本地没有该镜像，则从远端资料库中拉取过来。
     - 安装python和pip包
     - 安装应用所需的模块
     - 拷贝应用程序到容器内部相应目录
@@ -468,7 +468,7 @@
 
     
 
-3. 给该镜像文件打标签，使用你自己的image id。标签格式为`<your_username>/myfirstapp:1.0`，使用你再docker hub中注册的用户名。
+3. 给该镜像文件打标签，使用你自己的image id。标签格式为`<your_username>/myfirstapp:1.0`，使用你在docker hub中注册的用户名。
 
     ```
     $ <copy>docker tag 806493459c66 minqiao/myfirstapp:1.0</copy>
@@ -633,7 +633,7 @@
 
     
 
-2. 删除所有本地容器镜像。请使用你自己的IMAGE ID。
+2. 删除所有本地容器镜像。请使用你自己环境里的IMAGE ID。
 
     ```
     $ <copy>docker rmi -f 806493459c66 f6987c8d6ed5 f80194ae2e0c</copy>
@@ -681,7 +681,7 @@
 
     
 
-4. 我们可以运行之前创建的容器，根据标签不同，docker会自动从docker hub或OCI容器注册表中下载容器镜像然后运行。
+4. 我们可以运行之前创建的容器，根据标签不同，docker会自动从docker hub或OCI容器注册表中下载容器镜像然后运行。如：你可以运行下列命令，从OCI中下载容器镜像。
 
     ```
     <copy>docker run -p 80:5000 --name myfirstapp icn.ocir.io/oraclepartnersas/student01:myfirstapp-v1.0</copy>
