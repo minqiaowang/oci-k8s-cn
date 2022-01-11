@@ -79,7 +79,7 @@
 
 
 
-## Task 2 ：安装部署工具Helm
+## Task 2：安装部署工具Helm
 
 Helm 是一个用于 Kubernetes 应用的包管理工具，主要用来管理Helm Charts。有点类似于Linux中的 YUM。Helm Chart 是用来封装 Kubernetes 原生应用程序的一系列 YAML 文件。可以在你部署应用的时候自定义应用程序的一些 Metadata，以便于应用程序的分发。对于应用发布者而言，可以通过 Helm 打包应用、管理应用依赖关系、管理应用版本并发布应用到软件仓库。对于使用者而言，使用 Helm 后不用需要编写复杂的应用部署文件，可以以简单的方式在 Kubernetes 上查找、安装、升级、回滚、卸载应用程序。
 
@@ -137,6 +137,8 @@ Helm 是一个用于 Kubernetes 应用的包管理工具，主要用来管理Hel
 
 
 ## Task 3: 部署Redis集群
+
+下面我们将使用helm来部署Redis集群。
 
 1. 添加helm资料库。Bitnami是一个常用的资料库，提供各种应用程序和解决方案堆栈安装包下载。
 
