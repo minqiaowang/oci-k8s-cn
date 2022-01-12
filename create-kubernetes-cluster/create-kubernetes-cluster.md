@@ -14,7 +14,7 @@
 - 在 root compartment中设置策略（ policy）：  ```allow service OKE to manage all-resources in tenancy```.
 - 一组SSH键用来访问集群中的工作节点和堡垒机
 
-##Task 1：利用缺省设置快速创建Kubernetes集群
+## Task 1：利用缺省设置快速创建Kubernetes集群
 
 1. 登录到**OCI控制台**，打开**导航菜单**，选择**开发人员服务**，在**容器和构件**下点击**Kubernetes集群（OKE）**。
 
