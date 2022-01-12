@@ -55,7 +55,11 @@
 
     
 
-3. 运行下列命令来创建自签名的证书和密钥。
+3. 我们也可以从OCI控制台中查看到新创建了一个Load Balancer，在Load Balancer里有两个监听程序，分别监听80 和 443 端口。
+
+    ![image-20220112093301652](images/image-20220112093301652.png)
+
+4. 运行下列命令来创建自签名的证书和密钥。
 
     ```
     $ <copy>openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt -subj "/CN=nginxsvc/O=nginxsvc"</copy>
@@ -68,7 +72,7 @@
 
     
 
-4. 用证书和密钥文件创建TLS secret。TLS secret是用于ingress控制器上的SSL终止的。可以通过HTTPS进行访问。
+5. 用证书和密钥文件创建TLS secret。TLS secret是用于ingress控制器上的SSL终止的。可以通过HTTPS进行访问。
 
     ```
     $ <copy>kubectl create secret tls tls-secret --key tls.key --cert tls.crt</copy>
@@ -742,7 +746,7 @@ Helm 是一个用于 Kubernetes 应用的包管理工具，主要用来管理Hel
 
     
 
-7. 添加加域名解析。MAC系统编辑`/etc/hosts`, Windows系统编辑`“windows”→“System32”→“drivers”→“etc” →“hosts”` 文件。hosts文件中增加以下条目，请使用自己查出的IP地址和HOST名。
+7. 因为ingress控制器需要通过域名来分发连接后端的服务，而不是通过IP地址，所以我们需要添加加域名解析。Mac系统编辑文件：`sudo vi /etc/hosts`, Windows系统编辑：`“windows”→“System32”→“drivers”→“etc” →“hosts”` 文件。在hosts文件中增加以下条目，请使用自己查出的IP地址和HOST名。
 
     ```
     146.56.161.249 demo-redis.demo.com

@@ -95,7 +95,7 @@ $ <copy>sudo yum install -y python36-oci-cli</copy>
    
    ```
 
-3. 查看公钥内容，拷贝到下一步使用。
+3. 查看公钥内容，拷贝全部公钥内容到下一步使用。（**注意：**如果是使用的共享用户apac-student，请忽略第3到第7步）
 
    ```
    $ <copy>cat .oci/oci_api_key_public.pem</copy> 
@@ -215,7 +215,7 @@ kuberctl是kubernetes集群管理的命令行工具。
 9. 这样kubectl安装配置完毕，你可以用命令访问kubernetes集群。先检查集群健康状态。
 
    ```
-   $ kubectl get cs  
+   $ <copy>kubectl get cs</copy>  
    Warning: v1 ComponentStatus is deprecated in v1.19+
    NAME                 STATUS    MESSAGE             ERROR
    controller-manager   Healthy   ok                  
