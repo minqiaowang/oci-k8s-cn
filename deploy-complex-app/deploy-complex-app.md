@@ -59,7 +59,7 @@
 
     ![image-20220112093301652](images/image-20220112093301652.png)
 
-4. 运行下列命令来创建自签名的证书和密钥。
+4. 如果采用SSL访问，需要配置证书。我们可以运行下列命令来创建自签名的证书和密钥。
 
     ```
     $ <copy>openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt -subj "/CN=nginxsvc/O=nginxsvc"</copy>
@@ -72,7 +72,7 @@
 
     
 
-5. 用证书和密钥文件创建TLS secret。TLS secret是用于ingress控制器上的SSL终止的。可以通过HTTPS进行访问。
+5. 用证书和密钥文件创建TLS secret。TLS secret是用于ingress控制器上的SSL终止的，客户端可以通过SSL进行访问。
 
     ```
     $ <copy>kubectl create secret tls tls-secret --key tls.key --cert tls.crt</copy>
