@@ -28,6 +28,10 @@
         {            
             "title": "Lab 6: 清除环境",
             "filename": "../../clear-env/clear-env.md"
+        },
+        {            
+            "title": "附录: 在OKE中搭建Magento电商网站",
+            "filename": "../../deploy-magento-app/deploy-magento-app.md"
         }
     ]
 }
