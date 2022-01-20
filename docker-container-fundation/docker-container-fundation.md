@@ -25,7 +25,6 @@
     $ <copy>sudo yum -y install docker-engine</copy>
     ```
 
-    
 2. 启动docker环境。
 
     ```
@@ -145,33 +144,10 @@
 
     ```
     $ <copy>curl http://172.17.0.2</copy>
-    <!DOCTYPE html>
-    <html>
-    <head>
-    <title>Welcome to nginx!</title>
-    <style>
-    html { color-scheme: light dark; }
-    body { width: 35em; margin: 0 auto;
-    font-family: Tahoma, Verdana, Arial, sans-serif; }
-    </style>
-    </head>
-    <body>
-    <h1>Welcome to nginx!</h1>
-    <p>If you see this page, the nginx web server is successfully installed and
-    working. Further configuration is required.</p>
-    
-    <p>For online documentation and support please refer to
-    <a href="http://nginx.org/">nginx.org</a>.<br/>
-    Commercial support is available at
-    <a href="http://nginx.com/">nginx.com</a>.</p>
-    
-    <p><em>Thank you for using nginx.</em></p>
-    </body>
-    </html>
     ```
-
     
-
+    ![image-20220120160858368](images/image-20220120160858368.png)
+    
 10. 要让外部客户端访问容器内部的80端口，可以通过虚机的端口映射。虚机的80端口缺省是没有打开的，我们必须先修改一下防火墙的设置。运行下列命令。
 
     ```
