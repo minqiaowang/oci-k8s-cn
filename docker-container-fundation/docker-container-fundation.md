@@ -42,7 +42,7 @@
 
 ## Task 2：运行你的第一个容器
 
-1. 从远程资料库（缺省从[docker hub](hub.docker.com)中获取一个容器镜像到本地。例如，我们可以获取一个nginx容器镜像。
+1. 从远程资料库（缺省从[docker hub](hub.docker.com)）中获取一个容器镜像到本地。例如，我们可以获取一个nginx容器镜像。
 
     ```
     $ <copy>docker pull nginx</copy>
