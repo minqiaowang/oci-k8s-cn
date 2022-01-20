@@ -26,22 +26,18 @@
     ```
 
     
-
-2. 授权opc用户使用docker命令。
-
-    ```
-    $ <copy>sudo usermod -aG docker opc</copy>
-    ```
-
-    
-
-3. 启动docker环境。
+2. 启动docker环境。
 
     ```
     $ <copy>sudo systemctl enable docker</copy>
     $ <copy>sudo systemctl start docker</copy>
     ```
 
+3. 授权opc用户使用docker命令。
+
+    ```
+    $ <copy>sudo usermod -aG docker opc</copy>
+    ```
 
 
 ## Task 2：运行你的第一个容器
