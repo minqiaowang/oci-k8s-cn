@@ -220,7 +220,7 @@ kuberctl是kubernetes集群管理的命令行工具。
    
    
    
-9. 这样kubectl安装配置完毕，你可以用命令访问kubernetes集群。先检查集群健康状态。
+8. 这样kubectl安装配置完毕，你可以用命令访问kubernetes集群。先检查集群健康状态。
 
    ```
    $ <copy>kubectl get cs</copy>  
