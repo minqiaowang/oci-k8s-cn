@@ -37,6 +37,9 @@
     ```
     $ <copy>sudo usermod -aG docker opc</copy>
     ```
+    
+4. 退出连接，再重新以opc用户连接进来。
+
 
 
 ## Task 2：运行你的第一个容器
