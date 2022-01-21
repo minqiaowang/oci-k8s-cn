@@ -12,7 +12,7 @@
 
 ### 先决条件
 
-- 在OCI上创建一个VM，操作系统为缺省的Oracle Linux 7.9。（**注意：**因为资源有限，机型请选用最小缺省设置，并且选用缺省共享的VCN，请不要另外创建VCN。）
+- 在OCI上创建一个VM，操作系统为缺省的**Oracle Linux 7.9**。（**注意：**因为资源有限，机型请选用最小缺省设置，并且选用缺省共享的VCN，请不要另外创建VCN。）
 - 在[docker hub](https://hub.docker.com)上注册一个账号，用来存储容器镜像。
 
 
@@ -412,7 +412,7 @@
 
 我们可以将新建的容器镜像保存到远端的资料库中，缺省是[docker hub](http://hub.docker.com)，也可以保存到OCI的容器注册表里。
 
-1. 登录到缺省资料库。使用你在[docker hub](http://hub.docker.com)中注册的用户名和密码。
+1. 登录到缺省资料库。使用你在[docker hub](http://hub.docker.com)中注册的资料库名和密码。
 
     ```
     $ <copy>docker login</copy>
