@@ -19,49 +19,49 @@
    - `image: <your_name>/myfirstapp:1.0`: 要运行的容器镜像，在之前的实验中创建的镜像。请使用你在docker hub中注册的用户名，如果本地镜像不存在，则从远程资料库中获取。 
    - `type: LoadBalancer`: 定义了一个类型为LoadBalancer的服务, 用于负载均衡到后端的应用程序。
 
-   ```
-   <copy>
-   apiVersion: apps/v1
-   kind: Deployment
-   metadata:
-     name: myapp
-     labels:
-       app: myapp
-   spec:
-     replicas: 3
-     selector:
-       matchLabels:
-         app: myapp
-     template:
-       metadata:
-         labels:
-           app: myapp
-       spec:
-         containers:
-         - name: myapp
-           image: minqiao/myfirstapp:1.0
-           ports:
-           - containerPort: 5000
-             protocol: TCP
-   ---
-   apiVersion: v1
-   kind: Service
-   metadata:
-     name: myapp-svc
-     labels:
-       app: myapp
-   spec:
-     type: LoadBalancer
-     ports:
-     - port: 80
-       protocol: TCP
-       targetPort: 5000
-     selector:
-       app: myapp
-   </copy>
-   ```
+    ```
+    <copy>
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: myapp
+      labels:
+        app: myapp
+    spec:
+      replicas: 3
+      selector:
+        matchLabels:
+          app: myapp
+      template:
+        metadata:
+          labels:
+            app: myapp
+        spec:
+          containers:
+          - name: myapp
+            image: minqiao/myfirstapp:1.0
+            ports:
+            - containerPort: 5000
+              protocol: TCP
+    ---
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: myapp-svc
+      labels:
+        app: myapp
+    spec:
+      type: LoadBalancer
+      ports:
+      - port: 80
+        protocol: TCP
+        targetPort: 5000
+      selector:
+        app: myapp
+    </copy>
+    ```
 
-3. 要在kubernetes集群中创建`myfirstapp_lb.yaml`文件中定义的部署和服务，运行下面的命令：
+2. 要在kubernetes集群中创建`myfirstapp_lb.yaml`文件中定义的部署和服务，运行下面的命令：
 
    ```
    $ <copy>kubectl apply -f myfirstapp_lb.yaml</copy>
@@ -86,11 +86,12 @@
 
    - 输出显示`myapp`应用正在3个pod（`pod/myapp-*`）上运行，负载均衡器正在运行（`service/myapp-svc`），并且有一个外部IP（如：129.154.211.158），客户端可以使用该IP连接到部署在集群里的应用程序。
 
-6. 打开浏览器, 输入 url `http://<your_lb_publicIP>`, 你可以看到应用运行正常。
+4. 打开浏览器, 输入 url `http://<your_lb_publicIP>`, 你可以看到应用运行正常。
 
    ![image-20211225095640632](images/image-20211225095640632.png)
 
-7. 如果是在公司内网或其他有限制的网络环境下，会出现下列错误信息，不允许http访问。可以改用其他网络进行访问。![image-20210714153724741](images/image-20210714153724741.png)
+5. 如果是在公司内网或其他有限制的网络环境下，会出现下列错误信息，不允许http访问。可以改用其他网络进行访问。
+   ![image-20210714153724741](images/image-20210714153724741.png)
 
    
 
