@@ -508,13 +508,13 @@
 
     ![image-20211222152400678](images/image-20211222152400678.png)
 
-13. 点击复制令牌并保存到安全的地方，一旦关闭，令牌就不可见。每个用户最多只能创建两个令牌，如果是共享用户apac-student1，则可以不用创建令牌，请使用共享的令牌：`om[v]WJ89-m8oCYE}qgQ`
+13. 点击复制令牌并保存到安全的地方，一旦关闭，令牌就不可见。每个用户最多只能创建两个令牌，如果是共享用户apac-student1，则可以不用创建令牌，请使用共享的令牌：`gS.HR<8-Z{+M#7s<Qhqt`
 
     ![image-20211222152528149](images/image-20211222152528149.png)
 
 14. 回到命令行终端，执行命令注册到OCI的容器注册表：`docker login <region-key>.ocir.io`。其中Seoul的region-key 为icn，Chuncheon的region-key为yny。其它数据中心的region-key请查看[相关的网页](https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm)。
 
-    - 输入的用户格式为：<tenancy-namespace>/<username>，tenancy-namespace为OCI对象存储名称空间，缺省与租户名相同，在OCI租户信息页面能查到。username为OCI登录名，如：oraclepartnersas/apac-student1。
+    - 输入的用户格式为：<tenancy-namespace>/<username>，tenancy-namespace为OCI对象存储命名空间，缺省与租户名相同，在OCI租户信息页面能查到。username为OCI登录名，如：oraclepartnersas/apac-student1。
     - 密码为之前创建的令牌。
 
     ```

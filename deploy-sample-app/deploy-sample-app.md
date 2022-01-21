@@ -190,7 +190,7 @@
    - `<region-key>`：区域key，如：Seoul是icn，Chuncheon是yny。其它区域请查询[相关网页](https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm)。
    - `<tenancy-namespace>`：对象存储的命名空间，在租户信息页面里可以查询到，如：oraclepartersas。
    - `<oci-username>`：登录OCI的用户名，如：apac-student1。
-   - `<oci-auth-token>`：之前创建的令牌，如果使用共享用户apac-student1，则令牌为：`om[v]WJ89-m8oCYE}qgQ`。
+   - `<oci-auth-token>`：之前创建的令牌，如果使用共享用户apac-student1，则令牌为：`gS.HR<8-Z{+M#7s<Qhqt`。
    - `<email-address>`：必须输入，但可以输入任何邮件地址。
    
 2. 执行下面的命令创建一个secret，使用自己的相应信息。
