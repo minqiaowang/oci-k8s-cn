@@ -154,6 +154,14 @@ $ <copy>sudo yum install -y python36-oci-cli</copy>
 
    
 
+9. （共享用户的步骤）：编辑oci config文件，`vi ./oci/config`，将fineprint修改成如下的值：
+
+   ```
+   fingerprint=6d:32:0c:63:91:01:82:8e:bd:8c:4f:92:34:53:23:d9
+   ```
+   
+   
+   
 9. 在虚拟机的终端界面，测试OCI CLI命令，如果有正确返回，则配置成功。
 
    ```
