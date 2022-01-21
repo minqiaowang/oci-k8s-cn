@@ -197,7 +197,7 @@
 2. 执行下面的命令创建一个secret，使用自己的相应信息。
 
    ```
-   $ <copy>kubectl create secret docker-registry ocirsecret --docker-server=icn.ocir.io --docker-username='oraclepartnersas/apac-student1' --docker-password='om[v]WJ89-m8oCYE}qgQ' --docker-email='email@null.com'</copy>
+   $ <copy>kubectl create secret docker-registry ocirsecret --docker-server=icn.ocir.io --docker-username='oraclepartnersas/apac-student1' --docker-password='gS.HR<8-Z{+M#7s<Qhqt' --docker-email='email@null.com'</copy>
    secret/ocirsecret created
    ```
 
