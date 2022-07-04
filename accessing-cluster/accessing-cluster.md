@@ -218,22 +218,8 @@ kuberctl是kubernetes集群管理的命令行工具。
    $ export KUBECONFIG=$HOME/.kube/config
    ```
    
-   
-   
-8. 这样kubectl安装配置完毕，你可以用命令访问kubernetes集群。先检查集群健康状态。
-
-   ```
-   $ <copy>kubectl get cs</copy>  
-   Warning: v1 ComponentStatus is deprecated in v1.19+
-   NAME                 STATUS    MESSAGE             ERROR
-   controller-manager   Healthy   ok                  
-   scheduler            Healthy   ok                  
-   etcd-0               Healthy   {"health":"true"} 
-   ```
-   
-   
-   
-9. 先检查集群节点状态。
+     
+8. 这样kubectl安装配置完毕，你可以用命令访问kubernetes集群。先检查集群节点状态。
 
    ```
    $ <copy>kubectl get nodes</copy>
