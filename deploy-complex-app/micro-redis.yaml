@@ -22,7 +22,7 @@ spec:
           containerPort: 8000
           protocol: TCP
       imagePullSecrets:
-        - name: ocirsecret-sh
+        - name: ocirsecret
 ---
 apiVersion: v1
 kind: Service
@@ -40,12 +40,13 @@ spec:
   selector:
     app: demo-redis-dp
 
+
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    kubernetes.io/ingress.class: "nginx"  
+    kubernetes.io/ingress.class: "nginx"
   labels:
     app.kubernetes.io/instance: demo-redis-dp
   name: demo-redis-ingress
@@ -58,7 +59,10 @@ spec:
     http:
       paths:
         - path: /
+          pathType: Prefix
           backend:
-            serviceName: demo-redis-svc
-            servicePort: 8000
+            service:
+                name: demo-redis-svc
+                port:
+                  number: 8000
 

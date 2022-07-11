@@ -17,10 +17,10 @@
 
 ![image-20220107111007887](images/image-20220107111007887.png)
 
-1. 运行下列命令在kubernetes集群里部署ingress控制器。
+1. 运行下列命令在kubernetes集群里部署ingress控制器。注意，在本实验中，我们使用的是ingress控制器1.1..3版本。建议使用最新的版本，最新版本号可以[在该网页中查到](https://github.com/kubernetes/ingress-nginx)。
 
     ```
-    $ <copy>kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.44.0/deploy/static/provider/cloud/deploy.yaml</copy>
+    $ <copy>kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.1.3/deploy/static/provider/cloud/deploy.yaml</copy>
     namespace/ingress-nginx created
     serviceaccount/ingress-nginx created
     configmap/ingress-nginx-controller created
@@ -664,7 +664,7 @@ Helm 是一个用于 Kubernetes 应用的包管理工具，主要用来管理Hel
               containerPort: 8000
               protocol: TCP
           imagePullSecrets:
-            - name: ocirsecret-sh
+            - name: ocirsecret
     ---
     apiVersion: v1
     kind: Service
@@ -681,13 +681,13 @@ Helm 是一个用于 Kubernetes 应用的包管理工具，主要用来管理Hel
         targetPort: 8000
       selector:
         app: demo-redis-dp
-    
+        
     ---
-    apiVersion: networking.k8s.io/v1beta1
+    apiVersion: networking.k8s.io/v1
     kind: Ingress
     metadata:
       annotations:
-        kubernetes.io/ingress.class: "nginx"  
+        kubernetes.io/ingress.class: "nginx"
       labels:
         app.kubernetes.io/instance: demo-redis-dp
       name: demo-redis-ingress
@@ -700,13 +700,16 @@ Helm 是一个用于 Kubernetes 应用的包管理工具，主要用来管理Hel
         http:
           paths:
             - path: /
+              pathType: Prefix
               backend:
-                serviceName: demo-redis-svc
-                servicePort: 8000
+                service:
+                    name: demo-redis-svc
+                    port:
+                      number: 8000
     ```
-
     
-
+    
+    
 4. 部署前端应用
 
     ```
