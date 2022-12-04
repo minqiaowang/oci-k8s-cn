@@ -123,6 +123,7 @@ Helm 是一个用于 Kubernetes 应用的包管理工具，主要用来管理Hel
     ```
     $ <copy>sudo chmod +x linux-386/helm</copy> 
     $ <copy>sudo mv linux-386/helm /usr/local/bin/</copy>
+    <copy></copy>
     ```
 
     
