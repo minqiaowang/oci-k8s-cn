@@ -118,7 +118,7 @@ Helm 是一个用于 Kubernetes 应用的包管理工具，主要用来管理Hel
 
     
 
-3. 安装。
+3. 安装helm。
 
     ```
     $ <copy>sudo chmod +x linux-386/helm</copy> 
