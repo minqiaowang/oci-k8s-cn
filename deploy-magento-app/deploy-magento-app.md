@@ -309,7 +309,7 @@ Magento是一款新的专业开源电子商务平台，采用php进行开发，�
 
 ## Task 5: 部署Magento应用
 
-1. 修改存储配置文件pvc.yaml。修改在Task 1中相应的装载目标信息。文件内容如下：
+1. 修改存储配置文件pvc.yaml。修改在Task 1中相应的装载目标信息。定义StorageClass[请参见文档](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengcreatingpersistentvolumeclaim_Provisioning_PVCs_on_FSS.htm#Provisioning_Persistent_Volume_Claims_on_the_FileStorageService)。文件内容如下：
 
     - mntTargetId: 装载目标的OCID
     - server: 装载目标的IP地址
@@ -318,10 +318,10 @@ Magento是一款新的专业开源电子商务平台，采用php进行开发，�
     ```
     #------------------------定义fss-------------------------
     kind: StorageClass
-    apiVersion: storage.k8s.io/v1beta1
+    apiVersion: storage.k8s.io/v1
     metadata:
       name: oci-fss
-    provisioner: oracle.com/oci-fss
+    provisioner: fss.csi.oraclecloud.com
     parameters:
       mntTargetId: ocid1.mounttarget.oc1.ap_seoul_1.aaaaaa...fsc2mia
     ---
