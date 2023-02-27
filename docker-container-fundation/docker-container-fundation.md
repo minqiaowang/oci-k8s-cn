@@ -514,7 +514,7 @@
 
 14. 回到命令行终端，执行命令注册到OCI的容器注册表：`docker login <region-key>.ocir.io`。其中Seoul的region-key 为icn，Chuncheon的region-key为yny。其它数据中心的region-key请查看[相关的网页](https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm)。
 
-    - 输入的用户格式为：<tenancy-namespace>/<username>，tenancy-namespace为OCI对象存储命名空间，缺省与租户名相同，在OCI租户信息页面能查到。username为OCI登录名，如：oraclepartnersas/apac-student1。
+    - 输入的用户格式为：<tenancy-namespace>/<username>，tenancy-namespace为OCI对象存储命名空间，在OCI租户信息页面能查到，可能与租户名称不相同。username为OCI登录名，在console的用户界面能查到，可能包括oracleidentitycloudservice的前缀。本环境中，格式为：oraclepartnersas/apac-student1。
     - 密码为之前创建的令牌。
 
     ```
